@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "./axios";
+import { Link } from "react-router-dom";
 
 export default class Registration extends React.Component {
     constructor(props) {
@@ -22,17 +23,43 @@ export default class Registration extends React.Component {
         };
         axios
             .post("/register", newUser)
-            .then((data) => {
-                console.log("am I getting here?");
+            .then(({ data }) => {
                 console.log("data: ", data);
+                if (data.regSuccess) {
+                    console.log("We have succeeded");
+                    location.replace("/");
+                } else {
+                    if (data.emailExists) {
+                        this.setState({
+                            emailError: true,
+                        });
+                    } else {
+                        this.setState({
+                            error: true,
+                        });
+                    }
+                }
             })
             .catch((err) => {
                 console.log("error in axios/register", err);
+                this.setState({
+                    error: true,
+                });
             });
     }
     render() {
         return (
             <div>
+                {this.state.error && (
+                    <div className="error">
+                        An error has occured. Please try again.
+                    </div>
+                )}
+                {this.state.emailError && (
+                    <div className="error">
+                        Email already exits. Please try again.
+                    </div>
+                )}
                 <label>
                     First Name:
                     <input
@@ -66,6 +93,10 @@ export default class Registration extends React.Component {
                     />
                 </label>
                 <button onClick={(e) => this.submit()}>Submit</button>
+                <p>
+                    Already a member? Click
+                    <a href="/login">here </a>to Log in!
+                </p>
             </div>
         );
     }

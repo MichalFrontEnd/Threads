@@ -65,8 +65,8 @@ if (process.env.NODE_ENV != "production") {
     app.use("/bundle.js", (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
 
-app.get("/welcome", function (req, res) {
-    if (req.session.userId) {
+app.get("/welcome", (req, res) => {
+    if (req.session.user_id) {
         res.redirect("/");
     } else {
         res.sendFile(__dirname + "/index.html");
@@ -74,7 +74,7 @@ app.get("/welcome", function (req, res) {
 });
 
 app.get("*", function (req, res) {
-    if (!req.session.userId) {
+    if (!req.session.user_id) {
         res.redirect("/welcome");
     } else {
         res.sendFile(__dirname + "/index.html");
@@ -85,37 +85,73 @@ app.get("*", function (req, res) {
 app.post("/register", (req, res) => {
     //console.log("req.body: ", req.body);
     const { first, last, email } = req.body;
-    hash(req.body.pwd)
-        .then((hashedPwd) => {
-            db.logCreds(first, last, email, hashedPwd)
-                .then((results) => {
-                    //console.log("results.rows[0]: ", results.rows[0]);
-                    ////storing the user_id and name in the cookie:
-                    req.session.user_id = results.rows[0].id;
-                    req.session.first = req.body.first;
-                    res.json({ data: results.rows[0], regSuccess: true });
-                })
-                .catch((err) => {
-                    console.log("err in logCreds in POST /reg: ", err);
-                    //**********in petition I sent an error for existing email.*************
+    hash(req.body.pwd).then((hashedPwd) => {
+        db.logCreds(first, last, email, hashedPwd)
+            .then((results) => {
+                //console.log("results.rows[0]: ", results.rows[0]);
+                ////storing the user_id and name in the cookie:
+                req.session.user_id = results.rows[0].id;
+                req.session.first = req.body.first;
+                res.json({ data: results.rows[0], regSuccess: true });
+            })
+            .catch((err) => {
+                console.log("err in logCreds in POST /reg: ", err);
 
-                    //if (err.code === "23505") {
-                    //    res.render("reg", {
-                    //        layout: "main",
-                    //        duplicateKey: true,
-                    //    });
-                    //} else {
-                    //    res.render("reg", {
-                    //        layout: "main",
-                    //        error: true,
-                    //    });
-                    //}
-                });
-        })
-        .catch((err) => {
-            console.log("err in password hashing: ", err);
-            res.json({ regSuccess: false });
-        });
+                //**********in petition I sent an error for existing email.*************
+
+                if (err.code === "23505") {
+                    res.json({ emailExists: true });
+                } else {
+                    res.json({ regSuccess: false });
+                }
+            });
+    });
+});
+
+app.post("/login", (req, res) => {
+    //getting the hashed pwd from the db using the email.
+    console.log("req.body in login: ", req.body);
+    if (req.body.email) {
+        //console.log("req.body.email: ", req.body.email);
+        db.getPwd(req.body.email)
+            .then((results) => {
+                console.log("results in getPwd: ", results);
+                if (!results.rows[0].pwd) {
+                    res.json({ loginSuccess: false });
+                } else {
+                    //comparing the user input pwd and the hashed pwd
+                    compare(req.body.pwd, results.rows[0].pwd)
+                        .then((matchValue) => {
+                            if (matchValue === true) {
+                                //req.session.email = req.body.email;
+                                //req.session.first = results.rows[0].first;
+                                req.session.user_id = results.rows[0].id;
+                                res.json({
+                                    loginSuccess: true,
+                                    data: results.rows[0],
+                                });
+                            } else {
+                                res.json({ loginSuccess: false });
+                            }
+                        })
+                        .catch((err) => {
+                            console.log("error in compare", err);
+                            res.json({ loginSuccess: false });
+                        });
+                }
+            })
+            .catch((err) => {
+                console.log("err in Post /login getting creds: ", err);
+                res.json({ loginSuccess: false });
+            });
+    } else {
+        res.json({ loginSuccess: false });
+    }
+});
+
+app.get("/logout", (req, res) => {
+    req.session = null;
+    res.redirect("/*");
 });
 
 app.listen(8080, function () {
