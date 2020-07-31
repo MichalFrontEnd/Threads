@@ -10,7 +10,7 @@ export default function Welcome() {
             <div>
                 <h1> Welcome </h1> <img src="Bows.png" />
                 <Route exact path="/" component={Registration} />
-                <Route exact="/login" component={Login} />
+                <Route path="/login" component={Login} />
             </div>
         </HashRouter>
     );

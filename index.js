@@ -73,14 +73,6 @@ app.get("/welcome", (req, res) => {
     }
 });
 
-app.get("*", function (req, res) {
-    if (!req.session.user_id) {
-        res.redirect("/welcome");
-    } else {
-        res.sendFile(__dirname + "/index.html");
-    }
-});
-
 //petition reg
 app.post("/register", (req, res) => {
     //console.log("req.body: ", req.body);
@@ -152,6 +144,14 @@ app.post("/login", (req, res) => {
 app.get("/logout", (req, res) => {
     req.session = null;
     res.redirect("/*");
+});
+
+app.get("*", function (req, res) {
+    if (!req.session.user_id) {
+        res.redirect("/welcome");
+    } else {
+        res.sendFile(__dirname + "/index.html");
+    }
 });
 
 app.listen(8080, function () {
