@@ -14,7 +14,12 @@ CREATE TABLE users(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-
+CREATE TABLE pwd_codes(
+    id SERIAL PRIMARY KEY,
+    email VARCHAR,
+    code VARCHAR(6),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 --DROP TABLE IF EXISTS signatures CASCADE;
 
 --CREATE TABLE signatures(

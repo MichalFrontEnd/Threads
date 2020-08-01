@@ -8,9 +8,18 @@ export default class Login extends React.Component {
         this.state = {};
         this.inputChange = this.inputChange.bind(this);
     }
+    inputChange(e) {
+        this.setState({
+            [e.target.name]: e.target.value,
+        });
+    }
+
     submit() {
         axios
-            .post("/login", { email: this.state.email, pwd: this.state.pwd })
+            .post("/login", {
+                email: this.state.email,
+                pwd: this.state.pwd,
+            })
             .then(({ data }) => {
                 console.log("data in login POST: ", data);
                 if (data.loginSuccess) {
@@ -49,7 +58,11 @@ export default class Login extends React.Component {
                 <button onClick={(e) => this.submit()}>Submit</button>
                 <p>
                     Not yet a member? Click
-                    <a href="/login">here </a>to register!
+                    <Link to="/reg"> here </Link>to register!
+                </p>
+                <p>
+                    Forgot your password? Click
+                    <Link to="/resetpwd"> here </Link>to reset it!
                 </p>
             </div>
         );

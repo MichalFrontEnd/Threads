@@ -14,9 +14,32 @@ module.exports.logCreds = (first, last, email, pwd) => {
 };
 
 module.exports.getPwd = function (email) {
-    let q = "SELECT first, pwd, id WHERE email = $1";
+    let q = "SELECT first, pwd, id FROM users WHERE email = $1";
 
     let params = [email];
-    console.log("q, params: ", q, params);
+    //console.log("q, params: ", q, params);
+    return db.query(q, params);
+};
+
+module.exports.storeCode = (email, code) => {
+    let q = "INSERT INTO pwd_codes (email, code) VALUES ($1, $2)";
+    let params = [email, code];
+    //console.log("params in storeCode: ", params);
+    return db.query(q, params);
+};
+
+module.exports.checkCode = function (email) {
+    let q =
+        "SELECT * FROM pwd_codes WHERE email = $1 AND CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes' ORDER BY id DESC LIMIT 1";
+    //WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes';
+    let params = [email];
+    //console.log("params in checkCode: ", params);
+    return db.query(q, params);
+};
+
+module.exports.updatePassword = (email, pwd) => {
+    let q = "UPDATE users SET pwd = $2 WHERE email = $1";
+    let params = [email, pwd];
+    console.log("params in updatePassword: ", params);
     return db.query(q, params);
 };

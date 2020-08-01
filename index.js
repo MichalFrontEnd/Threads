@@ -7,6 +7,7 @@ const db = require("./db");
 const s3 = require("./s3");
 const { s3Url } = require("./config");
 app.use(compression());
+const { sendEmail } = require("./ses");
 
 app.use(
     cookieSession({
@@ -107,7 +108,7 @@ app.post("/login", (req, res) => {
         //console.log("req.body.email: ", req.body.email);
         db.getPwd(req.body.email)
             .then((results) => {
-                console.log("results in getPwd: ", results);
+                //console.log("results in getPwd: ", results);
                 if (!results.rows[0].pwd) {
                     res.json({ loginSuccess: false });
                 } else {
@@ -138,6 +139,80 @@ app.post("/login", (req, res) => {
             });
     } else {
         res.json({ loginSuccess: false });
+    }
+});
+
+app.post("/checkemail", (req, res) => {
+    if (req.body.email) {
+        db.getPwd(req.body.email)
+            .then((results) => {
+                //console.log("results in checkemail: ", results.rows[0]);
+
+                const cryptoRandomString = require("crypto-random-string");
+                const secretCode = cryptoRandomString({
+                    length: 6,
+                });
+                db.storeCode(req.body.email, secretCode)
+                    .then(() => {
+                        sendEmail(
+                            "miyako.front@gmail.com",
+                            results.rows[0].first,
+                            secretCode,
+                            "Reset password"
+                        );
+                        res.json({
+                            checkEmailSuccess: true,
+                            //data: results.rows[0],
+                        });
+                    })
+                    .catch((err) => {
+                        console.log("error in storeCode", err);
+                        res.json({ checkEmailSuccess: false });
+                    });
+            })
+            .catch((err) => {
+                console.log("err in Post /checkemail: ", err);
+                res.json({ checkEmailSuccess: false });
+            });
+    }
+});
+
+app.post("/checkcode", (req, res) => {
+    if (req.body.code) {
+        db.checkCode(req.body.email)
+            .then((results) => {
+                if (req.body.code === results.rows[0].code) {
+                    console.log("it's a match!");
+                    res.json({ checkCodeSuccess: true });
+                } else {
+                    console.log("it's not a match :/");
+                    res.json({ checkCodeSuccess: false });
+                }
+            })
+            .catch((err) => {
+                console.log("err in Post /checkcode: ", err);
+                res.json({ checkCodeSuccess: false });
+            });
+    } else {
+        res.json({ checkCodeSuccess: false });
+    }
+});
+
+app.post("/setnewpwd", (req, res) => {
+    console.log("req.body in setnewpwd: ", req.body);
+    if (req.body.pwd) {
+        hash(req.body.pwd).then((hashedPwd) => {
+            db.updatePassword(req.body.email, hashedPwd)
+                .then(() => {
+                    console.log("Password changed successfuly");
+                    res.json({ updatePwdSuccess: true });
+                })
+                .catch((err) => {
+                    console.log("error in updatePassword", err);
+                });
+        });
+    } else {
+        res.json({ updatePwdSuccess: false });
     }
 });
 
