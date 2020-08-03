@@ -1,7 +1,5 @@
 //import React, { Component } from 'react';
 import React, { Fragment } from "react";
-import Profilepic from "./profilepic";
-import Uploader from "./uploader";
 import Logo from "./logo";
 import axios from "./axios";
 import Profile from "./profile";
@@ -36,7 +34,7 @@ class App extends React.Component {
             },
             () => {
                 console.log(
-                    "uploader is toggled!",
+                    //"uploader is toggled!",
                     this.state.uploaderIsVisible
                 );
             }
@@ -57,34 +55,24 @@ class App extends React.Component {
         );
     }
     render() {
+        if (!this.state.first) {
+            return null;
+        }
         return (
             <Fragment>
                 <Logo />
-                <Profile first={this.state.first} last={this.state.last} />
-
-                <Profilepic
+                <Profile
                     first={this.state.first}
                     last={this.state.last}
                     url={this.state.url}
+                    uploaderIsVisible={this.state.uploaderIsVisible}
                     toggleUpload={() => {
                         this.toggleUpload();
                     }}
-                />
-                <button
-                    onClick={() => {
-                        this.toggleUpload();
+                    imageUpdate={(e) => {
+                        this.imageUpdate(e);
                     }}
-                >
-                    Add photo
-                </button>
-                {this.state.uploaderIsVisible && (
-                    <Uploader
-                        url={this.state.url}
-                        imageUpdate={(arg) => {
-                            this.imageUpdate(arg);
-                        }}
-                    />
-                )}
+                />
             </Fragment>
         );
     }
