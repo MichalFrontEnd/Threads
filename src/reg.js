@@ -24,9 +24,9 @@ export default class Registration extends React.Component {
         axios
             .post("/register", newUser)
             .then(({ data }) => {
-                console.log("data: ", data);
+                //console.log("data: ", data);
                 if (data.regSuccess) {
-                    console.log("We have succeeded");
+                    //console.log("We have succeeded");
                     location.replace("/");
                 } else {
                     if (data.emailExists) {

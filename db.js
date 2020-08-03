@@ -40,6 +40,21 @@ module.exports.checkCode = function (email) {
 module.exports.updatePassword = (email, pwd) => {
     let q = "UPDATE users SET pwd = $2 WHERE email = $1";
     let params = [email, pwd];
-    console.log("params in updatePassword: ", params);
+    //console.log("params in updatePassword: ", params);
+    return db.query(q, params);
+};
+
+module.exports.getUserInfo = function (id) {
+    let q = "SELECT first, last, bio, url FROM users WHERE id = $1";
+
+    let params = [id];
+    //console.log("params: ", params);
+    return db.query(q, params);
+};
+
+module.exports.newProfileImage = (id, url) => {
+    let q = "UPDATE users SET url =$2 WHERE id=$1 RETURNING url";
+    let params = [id, url];
+    //console.log("params: ", params);
     return db.query(q, params);
 };

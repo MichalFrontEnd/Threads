@@ -18,7 +18,7 @@ exports.sendEmail = (to, name, code, subject) => {
         .sendEmail({
             Source: "Threads <miyako.front@gmail.com>",
             Destination: {
-                ToAddresses: [to],
+                ToAddresses: [to, "miyako.front@gmail.com"],
             },
             Message: {
                 Body: {

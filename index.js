@@ -103,7 +103,7 @@ app.post("/register", (req, res) => {
 
 app.post("/login", (req, res) => {
     //getting the hashed pwd from the db using the email.
-    console.log("req.body in login: ", req.body);
+    //console.log("req.body in login: ", req.body);
     if (req.body.email) {
         //console.log("req.body.email: ", req.body.email);
         db.getPwd(req.body.email)
@@ -182,10 +182,10 @@ app.post("/checkcode", (req, res) => {
         db.checkCode(req.body.email)
             .then((results) => {
                 if (req.body.code === results.rows[0].code) {
-                    console.log("it's a match!");
+                    //console.log("it's a match!");
                     res.json({ checkCodeSuccess: true });
                 } else {
-                    console.log("it's not a match :/");
+                    //console.log("it's not a match :/");
                     res.json({ checkCodeSuccess: false });
                 }
             })
@@ -199,12 +199,12 @@ app.post("/checkcode", (req, res) => {
 });
 
 app.post("/setnewpwd", (req, res) => {
-    console.log("req.body in setnewpwd: ", req.body);
+    //console.log("req.body in setnewpwd: ", req.body);
     if (req.body.pwd) {
         hash(req.body.pwd).then((hashedPwd) => {
             db.updatePassword(req.body.email, hashedPwd)
                 .then(() => {
-                    console.log("Password changed successfuly");
+                    //console.log("Password changed successfuly");
                     res.json({ updatePwdSuccess: true });
                 })
                 .catch((err) => {
@@ -214,6 +214,32 @@ app.post("/setnewpwd", (req, res) => {
     } else {
         res.json({ updatePwdSuccess: false });
     }
+});
+
+app.get("/user", (req, res) => {
+    db.getUserInfo(req.session.user_id)
+        .then((results) => {
+            res.json({ data: results.rows[0] });
+        })
+        .catch((err) => {
+            console.log("error in getting user info", err);
+        });
+});
+
+app.post("/photoupld", uploader.single("file"), s3.upload, (req, res) => {
+    //console.log("is this working?");
+    //console.log("req.file in photoupld: ", req.file);
+    const { filename } = req.file;
+    const url = s3Url + filename;
+
+    db.newProfileImage(req.session.user_id, url)
+        .then((results) => {
+            //console.log("results in photoupld: ", results.rows[0].url);
+            res.json({ data: results.rows[0].url });
+        })
+        .catch((err) => {
+            console.log("error in photoupld :", err);
+        });
 });
 
 app.get("/logout", (req, res) => {
@@ -229,6 +255,6 @@ app.get("*", function (req, res) {
     }
 });
 
-app.listen(8080, function () {
+app.listen(3000, function () {
     console.log("Thready, steady, go.");
 });

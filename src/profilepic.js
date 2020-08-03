@@ -1,13 +1,15 @@
 import React from "react";
 
 export default function Profilepic(props) {
-    let { first, last, url } = props;
-    url = url || "img/default.png";
+    let { first, last, url, toggleUpload } = props;
+    console.log("props in Profilepic: ", props);
+    url = url || "default.jpg";
     return (
         <React.Fragment>
-            <div>Here we'll see a picture</div>
-            <img src={url} alt={first} />
-            {first} {last}
+            <p>
+                Hey,{""} {first} {last}!
+            </p>
+            <img src={url} alt={(first, last)} onClick={toggleUpload} />
         </React.Fragment>
     );
 }
