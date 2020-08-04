@@ -1,14 +1,18 @@
 import React from "react";
 import Profilepic from "./profilepic";
 import Uploader from "./uploader";
+import Bio from "./bio";
 
 export default function Profile(props) {
     //let { first, last, url, toggleUpload } = props;
 
-    console.log("props in Profile: ", props);
+    //console.log("props in Profile: ", props);
     return (
         <div>
             <h1>Profile Page sanity check</h1>
+            <p>
+                Hey,{""} {props.first} {props.last}!
+            </p>
             <Profilepic
                 first={props.first}
                 last={props.last}
@@ -16,6 +20,7 @@ export default function Profile(props) {
                 toggleUpload={() => {
                     props.toggleUpload();
                 }}
+                pPicClass="profile_pic"
             />
             <button
                 onClick={() => {
@@ -32,6 +37,12 @@ export default function Profile(props) {
                     }}
                 />
             )}
+            <Bio
+                bio={props.bio}
+                bioUpdate={(bio) => {
+                    props.bioUpdate(bio);
+                }}
+            />
         </div>
     );
 }

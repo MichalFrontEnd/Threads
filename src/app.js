@@ -1,6 +1,6 @@
 //import React, { Component } from 'react';
 import React, { Fragment } from "react";
-import Logo from "./logo";
+import Header from "./header";
 import axios from "./axios";
 import Profile from "./profile";
 
@@ -13,10 +13,6 @@ class App extends React.Component {
         this.toggleUpload = this.toggleUpload.bind(this);
     }
     componentDidMount() {
-        //console.log(
-        //    "this.state.uploaderIsVisible: ",
-        //    this.state.uploaderIsVisible
-        //);
         axios.get("/user").then(({ data }) => {
             //console.log("data.data in get /user: ", data.data);
             this.setState({
@@ -54,23 +50,41 @@ class App extends React.Component {
             }
         );
     }
+    bioUpdate(bio) {
+        this.setState({
+            bio: bio,
+        });
+    }
     render() {
         if (!this.state.first) {
             return null;
         }
         return (
             <Fragment>
-                <Logo />
+                <header>
+                    <Header
+                        first={this.state.first}
+                        last={this.state.last}
+                        url={this.state.url}
+                        toggleUpload={(e) => {
+                            this.toggleUpload(e);
+                        }}
+                    />
+                </header>
                 <Profile
                     first={this.state.first}
                     last={this.state.last}
                     url={this.state.url}
+                    bio={this.state.bio}
                     uploaderIsVisible={this.state.uploaderIsVisible}
-                    toggleUpload={() => {
-                        this.toggleUpload();
+                    toggleUpload={(e) => {
+                        this.toggleUpload(e);
                     }}
                     imageUpdate={(e) => {
                         this.imageUpdate(e);
+                    }}
+                    bioUpdate={(e) => {
+                        this.bioUpdate(e);
                     }}
                 />
             </Fragment>

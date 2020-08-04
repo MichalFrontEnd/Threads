@@ -1,5 +1,5 @@
 import React from "react";
 
 export default function Logo() {
-    return <img src="Bowssmall.png" />;
+    return <img className="header_logo" src="Bowssmall.png" />;
 }

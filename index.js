@@ -242,6 +242,19 @@ app.post("/photoupld", uploader.single("file"), s3.upload, (req, res) => {
         });
 });
 
+app.post("/updatebio", (req, res) => {
+    console.log("req.body in updatebio: ", req.body);
+
+    db.bioUpdate(req.session.user_id, req.body.bio)
+        .then((results) => {
+            //console.log("results.rows[0] in updatebio: ", results.rows[0]);
+            res.json({ data: results.rows[0].bio });
+        })
+        .catch((err) => {
+            console.log("error in updatebio :", err);
+        });
+});
+
 app.get("/logout", (req, res) => {
     req.session = null;
     res.redirect("/*");

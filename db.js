@@ -58,3 +58,10 @@ module.exports.newProfileImage = (id, url) => {
     //console.log("params: ", params);
     return db.query(q, params);
 };
+
+module.exports.bioUpdate = (id, bio) => {
+    let q = "UPDATE users SET bio =$2 WHERE id=$1 RETURNING bio";
+    let params = [id, bio];
+    //console.log("params: ", params);
+    return db.query(q, params);
+};
