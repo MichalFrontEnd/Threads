@@ -3,6 +3,8 @@ import React, { Fragment } from "react";
 import Header from "./header";
 import axios from "./axios";
 import Profile from "./profile";
+import OtherUser from "./otheruser";
+import { Link, BrowserRouter, Route } from "react-router-dom";
 
 class App extends React.Component {
     constructor(props) {
@@ -71,22 +73,34 @@ class App extends React.Component {
                         }}
                     />
                 </header>
-                <Profile
-                    first={this.state.first}
-                    last={this.state.last}
-                    url={this.state.url}
-                    bio={this.state.bio}
-                    uploaderIsVisible={this.state.uploaderIsVisible}
-                    toggleUpload={(e) => {
-                        this.toggleUpload(e);
-                    }}
-                    imageUpdate={(e) => {
-                        this.imageUpdate(e);
-                    }}
-                    bioUpdate={(e) => {
-                        this.bioUpdate(e);
-                    }}
-                />
+                <BrowserRouter>
+                    <Fragment>
+                        <Route
+                            exact
+                            path="/app"
+                            render={() => (
+                                <Profile
+                                    first={this.state.first}
+                                    last={this.state.last}
+                                    url={this.state.url}
+                                    bio={this.state.bio}
+                                    uploaderIsVisible={
+                                        this.state.uploaderIsVisible
+                                    }
+                                    toggleUpload={this.toggleUpload}
+                                    imageUpdate={(e) => {
+                                        this.imageUpdate(e);
+                                    }}
+                                    bioUpdate={(e) => {
+                                        this.bioUpdate(e);
+                                    }}
+                                />
+                            )}
+                        />
+                        {/*end of Route, Profile*/}
+                        <Route path="/user/:id" component={OtherUser} />
+                    </Fragment>
+                </BrowserRouter>
             </Fragment>
         );
     }

@@ -44,11 +44,11 @@ module.exports.updatePassword = (email, pwd) => {
     return db.query(q, params);
 };
 
-module.exports.getUserInfo = function (id) {
+module.exports.getUserInfo = (id) => {
     let q = "SELECT first, last, bio, url FROM users WHERE id = $1";
 
     let params = [id];
-    //console.log("params: ", params);
+    //console.log("params in getUserInfo: ", params);
     return db.query(q, params);
 };
 

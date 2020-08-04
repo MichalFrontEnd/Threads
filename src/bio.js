@@ -6,7 +6,6 @@ class Bio extends React.Component {
         super(props);
         this.state = {
             mode: "view",
-            newBio: null,
             value: this.props.bio,
         };
     }
@@ -31,7 +30,7 @@ class Bio extends React.Component {
         fd.append("bio", this.state.value);
 
         Axios.post("/updatebio", { bio: this.state.value }).then(({ data }) => {
-            console.log("data in updateBio: ", data.data);
+            //console.log("data in updateBio: ", data.data);
             this.props.bioUpdate(data.data);
             this.setState({
                 mode: "view",
@@ -51,13 +50,6 @@ class Bio extends React.Component {
         if (!this.props.bio) {
             elem = (
                 <div>
-                    {/*<textarea
-                        name="bio"
-                        rows="10"
-                        cols="30"
-                        placeholder="What do you want to tell us about yourself? :)"
-                        onChange={(e) => this.bioChange(e)}
-                    ></textarea>*/}
                     <button onClick={(e) => this.toggleBio(e)}>Add bio!</button>
                 </div>
             );

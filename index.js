@@ -255,6 +255,27 @@ app.post("/updatebio", (req, res) => {
         });
 });
 
+app.get("/ouser/:id", (req, res) => {
+    if (req.params.id == req.session.user_id) {
+        return res.json({ sameUser: true });
+    }
+    //console.log("req.params: ", req.params.id);
+    db.getUserInfo(req.params.id)
+        .then((results) => {
+            console.log("results in GET ouser", results.rows[0]);
+            if (!results.rows[0]) {
+                res.json({ getInfoSuccess: false });
+            } else {
+                res.json({ data: results.rows[0], getInfoSuccess: true });
+            }
+        })
+        .catch((err) => {
+            console.log("error in GET ouser", err);
+            res.json({ getInfoSuccess: false });
+            //send error message if failed
+        });
+});
+
 app.get("/logout", (req, res) => {
     req.session = null;
     res.redirect("/*");
@@ -268,6 +289,6 @@ app.get("*", function (req, res) {
     }
 });
 
-app.listen(3000, function () {
+app.listen(8080, function () {
     console.log("Thready, steady, go.");
 });

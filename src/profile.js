@@ -17,8 +17,8 @@ export default function Profile(props) {
                 first={props.first}
                 last={props.last}
                 url={props.url}
-                toggleUpload={() => {
-                    props.toggleUpload();
+                toggleUpload={(e) => {
+                    props.toggleUpload(e);
                 }}
                 pPicClass="profile_pic"
             />
