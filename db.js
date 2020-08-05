@@ -65,3 +65,15 @@ module.exports.bioUpdate = (id, bio) => {
     //console.log("params: ", params);
     return db.query(q, params);
 };
+
+module.exports.lastUsers = () => {
+    return db.query("SELECT * FROM users ORDER BY id DESC LIMIT 3");
+};
+
+module.exports.searchUser = (val) => {
+    let q = "SELECT * FROM users WHERE first ILIKE $1 OR last ILIKE $1";
+
+    let params = [val + "%"];
+    console.log("params in searchUser: ", params);
+    return db.query(q, params);
+};

@@ -1,0 +1,9 @@
+ id | first | last | email |                             pwd                              |                        bio                        |                                    url                                     |         created_at         
+----+-------+------+-------+--------------------------------------------------------------+---------------------------------------------------+----------------------------------------------------------------------------+----------------------------
+  1 | no    | no   | no@mo | $2a$10$sLAW7c6uKSIBZ28FIZ39UeT3MXgRf1IfeGMlo0bch1Tsx7S5YTevu |                                                   |                                                                            | 2020-07-30 18:58:34.760793
+  2 | so    | so   | so@so | $2a$10$orbWktoG9L4LzoCdugpcTuxmT7nkEGGKClRKdGTzA7nFhmRCfal0u |                                                   |                                                                            | 2020-07-30 18:59:34.949183
+  3 | qa    | qa   | qa@qa | $2a$10$JY3Ytql5AwzM3JemFlGEwey5TAXcsNjuBB553GUlAWmjZ3nwRmawC |                                                   |                                                                            | 2020-07-30 19:00:39.597947
+  4 | bo    | bo   | bo@bo | $2a$10$TAxluICg475Flxip5uyvoOoD3NE9xcS7J72SpS2wUMjw1sI4iU2Oa |                                                   |                                                                            | 2020-07-30 19:04:04.639166
+  5 | mo    | mo   | mo@mo | $2a$10$5vP74F5K1WgdcVGzgrPPPeYVmQME1M9QqVVC7j7dgFE.1v.hJaU.u | I'm Mo, and I like ballet and shiny outfits! *_*! | https://s3.amazonaws.com/spcdprojects/v3VareEe4NCi_VMve2hdPQui59NKGFt0.jpg | 2020-07-31 13:14:08.477449
+(5 rows)
+

@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import axios from "./axios";
-import { Link, BrowserRouter } from "react-router-dom";
+//import { Link, BrowserRouter } from "react-router-dom";
 
 class OtherUser extends React.Component {
     constructor(props) {
@@ -13,7 +13,7 @@ class OtherUser extends React.Component {
             "this.props.match.params in OtherUser mount: ",
             this.props.match.params
         );
-        axios.get(`/ouser/${id}`, id).then(({ data }) => {
+        axios.get(`/switch/user/${id}`, id).then(({ data }) => {
             console.log("data in GET ouser", data);
             if (data.sameUser) {
                 this.props.history.push("/app");

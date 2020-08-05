@@ -4,45 +4,36 @@ import Uploader from "./uploader";
 import Bio from "./bio";
 
 export default function Profile(props) {
-    //let { first, last, url, toggleUpload } = props;
+    let {
+        first,
+        last,
+        url,
+        bio,
+        toggleUpload,
+        uploaderIsVisible,
+        imageUpdate,
+        bioUpdate,
+    } = props;
 
     //console.log("props in Profile: ", props);
     return (
-        <div>
-            <h1>Profile Page sanity check</h1>
-            <p>
-                Hey,{""} {props.first} {props.last}!
-            </p>
+        <div className="user_card">
+            <h1 className="username">
+                <span>Hey,{""}</span> {first} {last}!
+            </h1>
+
             <Profilepic
-                first={props.first}
-                last={props.last}
-                url={props.url}
-                toggleUpload={(e) => {
-                    props.toggleUpload(e);
-                }}
+                first={first}
+                last={last}
+                url={url}
+                toggleUpload={toggleUpload}
                 pPicClass="profile_pic"
             />
-            <button
-                onClick={() => {
-                    props.toggleUpload();
-                }}
-            >
-                Add photo
-            </button>
-            {props.uploaderIsVisible && (
-                <Uploader
-                    url={props.url}
-                    imageUpdate={(url) => {
-                        props.imageUpdate(url);
-                    }}
-                />
+            <button onClick={props.toggleUpload}>Add photo</button>
+            {uploaderIsVisible && (
+                <Uploader url={url} imageUpdate={imageUpdate} />
             )}
-            <Bio
-                bio={props.bio}
-                bioUpdate={(bio) => {
-                    props.bioUpdate(bio);
-                }}
-            />
+            <Bio bio={bio} bioUpdate={bioUpdate} />
         </div>
     );
 }

@@ -2,6 +2,7 @@
 --sudo service postgresql start
 --
 DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS pwd_codes CASCADE;
 
 CREATE TABLE users(
     id SERIAL PRIMARY KEY,

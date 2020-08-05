@@ -1,5 +1,5 @@
 import React from "react";
-import Axios from "axios";
+import axios from "./axios";
 
 class Bio extends React.Component {
     constructor(props) {
@@ -29,7 +29,7 @@ class Bio extends React.Component {
         //console.log("this.state.newBio ", this.state.newBio);
         fd.append("bio", this.state.value);
 
-        Axios.post("/updatebio", { bio: this.state.value }).then(({ data }) => {
+        axios.post("/updatebio", { bio: this.state.value }).then(({ data }) => {
             //console.log("data in updateBio: ", data.data);
             this.props.bioUpdate(data.data);
             this.setState({

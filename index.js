@@ -255,14 +255,14 @@ app.post("/updatebio", (req, res) => {
         });
 });
 
-app.get("/ouser/:id", (req, res) => {
+app.get("/switch/user/:id", (req, res) => {
     if (req.params.id == req.session.user_id) {
         return res.json({ sameUser: true });
     }
     //console.log("req.params: ", req.params.id);
     db.getUserInfo(req.params.id)
         .then((results) => {
-            console.log("results in GET ouser", results.rows[0]);
+            //console.log("results in GET ouser", results.rows[0]);
             if (!results.rows[0]) {
                 res.json({ getInfoSuccess: false });
             } else {
@@ -276,6 +276,34 @@ app.get("/ouser/:id", (req, res) => {
         });
 });
 
+app.get("/showusers", (req, res) => {
+    db.lastUsers()
+        .then((results) => {
+            //console.log("results in lastUsers", results.rows);
+            res.json({ data: results.rows });
+        })
+        .catch((err) => {
+            console.log("error in showusers", err);
+        });
+});
+
+app.get("/search:search", (req, res) => {
+    console.log("req.params in search: ", req.params.search);
+    db.searchUser(req.params.search)
+        .then((results) => {
+            //console.log("results in search", results.rows);
+            ///use list.sort to reorganize the list
+            results.rows.sort(function (a, b) {
+                return a.last - b.last, a.first - b.first;
+            });
+            //console.log("results after sort", results.rows);
+            res.json({ data: results.rows, searchSuccess: true });
+        })
+        .catch((err) => {
+            console.log("error in search", err);
+        });
+});
+
 app.get("/logout", (req, res) => {
     req.session = null;
     res.redirect("/*");
@@ -283,7 +311,7 @@ app.get("/logout", (req, res) => {
 
 app.get("*", function (req, res) {
     if (!req.session.user_id) {
-        res.redirect("/welcome");
+        res.redirect("/");
     } else {
         res.sendFile(__dirname + "/index.html");
     }

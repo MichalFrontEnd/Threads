@@ -11,6 +11,7 @@ export default function Profilepic(props) {
                 alt={(first, last)}
                 onClick={toggleUpload}
                 className={props.pPicClass}
+                toggleUpload={toggleUpload}
             />
         </React.Fragment>
     );

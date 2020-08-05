@@ -23,7 +23,7 @@ export default class Login extends React.Component {
             .then(({ data }) => {
                 console.log("data in login POST: ", data);
                 if (data.loginSuccess) {
-                    location.replace("/app");
+                    location.replace("/");
                 } else {
                     this.setState({
                         error: true,

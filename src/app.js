@@ -4,6 +4,7 @@ import Header from "./header";
 import axios from "./axios";
 import Profile from "./profile";
 import OtherUser from "./otheruser";
+import Search from "./search";
 import { Link, BrowserRouter, Route } from "react-router-dom";
 
 class App extends React.Component {
@@ -24,6 +25,9 @@ class App extends React.Component {
                 url: data.data.url,
             });
         });
+    }
+    doNothing() {
+        console.log("I'm just here for my beauty");
     }
     toggleUpload() {
         this.setState(
@@ -62,46 +66,41 @@ class App extends React.Component {
             return null;
         }
         return (
-            <Fragment>
-                <header>
+            <BrowserRouter>
+                <div>
                     <Header
                         first={this.state.first}
                         last={this.state.last}
                         url={this.state.url}
-                        toggleUpload={(e) => {
-                            this.toggleUpload(e);
-                        }}
+                        toggleUpload={this.doNothing}
                     />
-                </header>
-                <BrowserRouter>
-                    <Fragment>
-                        <Route
-                            exact
-                            path="/app"
-                            render={() => (
-                                <Profile
-                                    first={this.state.first}
-                                    last={this.state.last}
-                                    url={this.state.url}
-                                    bio={this.state.bio}
-                                    uploaderIsVisible={
-                                        this.state.uploaderIsVisible
-                                    }
-                                    toggleUpload={this.toggleUpload}
-                                    imageUpdate={(e) => {
-                                        this.imageUpdate(e);
-                                    }}
-                                    bioUpdate={(e) => {
-                                        this.bioUpdate(e);
-                                    }}
-                                />
-                            )}
-                        />
-                        {/*end of Route, Profile*/}
-                        <Route path="/user/:id" component={OtherUser} />
-                    </Fragment>
-                </BrowserRouter>
-            </Fragment>
+                    <Route path="/usersearch" component={Search} />
+                </div>
+                <div>
+                    <Route
+                        exact
+                        path="/"
+                        render={() => (
+                            <Profile
+                                first={this.state.first}
+                                last={this.state.last}
+                                url={this.state.url}
+                                bio={this.state.bio}
+                                uploaderIsVisible={this.state.uploaderIsVisible}
+                                toggleUpload={this.toggleUpload}
+                                imageUpdate={(e) => {
+                                    this.imageUpdate(e);
+                                }}
+                                bioUpdate={(e) => {
+                                    this.bioUpdate(e);
+                                }}
+                            />
+                        )}
+                    />
+                </div>
+                {/*end of Route, Profile*/}
+                <Route path="/user/:id" component={OtherUser} />
+            </BrowserRouter>
         );
     }
 }
