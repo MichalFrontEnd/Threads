@@ -7,7 +7,7 @@ export default function Search(props) {
     const [lastUsers, setLastUsers] = useState([]);
     const [userInput, setUserInput] = useState("");
     const [searchRes, setsearchRes] = useState([]);
-    const [error, setError] = useState("");
+    const [error, setError] = useState(false);
 
     useEffect(() => {
         //console.log("search has mounted!");
@@ -16,10 +16,17 @@ export default function Search(props) {
             setLastUsers(data.data);
         });
 
-        axios.get("/search" + userInput).then(({ data }) => {
-            //console.log("data in search", data.data);
+        axios.get(`/search${userInput || "+"}`).then(({ data }) => {
+            //console.log("data in search", data);
             setsearchRes(data.data);
+            //setError(data.searchSuccess);
+            //console.log("inside the if");
+            userInput && setError(!data.searchSuccess);
+
+            //console.log("data.searchSuccess: ", data.searchSuccess);
+            //console.log("inside the else");
         });
+        setsearchRes("");
     }, [userInput]);
 
     const userSearch = (e) => {
@@ -53,11 +60,7 @@ export default function Search(props) {
                     value={userInput}
                     onChange={userSearch}
                 />
-                {error && (
-                    <div className="error">
-                        No results for this search, sorry :/(/.
-                    </div>
-                )}
+
                 <div className="res_container">
                     {searchRes &&
                         searchRes.map((person, i) => {
@@ -70,12 +73,17 @@ export default function Search(props) {
                                     <div className="person">
                                         <img src={person.url} />
                                         <p>
-                                            {person.first + " " + person.last}{" "}
+                                            {`${person.first} ${person.last}`}
                                         </p>
                                     </div>
                                 </Link>
                             );
                         })}
+                    {error && (
+                        <div className="error">
+                            No results for this search, sorry :/(/.
+                        </div>
+                    )}
                 </div>
                 {/*<button onClick=>Submit</button>*/}
             </div>

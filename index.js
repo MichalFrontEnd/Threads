@@ -289,19 +289,29 @@ app.get("/showusers", (req, res) => {
 
 app.get("/search:search", (req, res) => {
     console.log("req.params in search: ", req.params.search);
-    db.searchUser(req.params.search)
-        .then((results) => {
-            //console.log("results in search", results.rows);
-            ///use list.sort to reorganize the list
-            results.rows.sort(function (a, b) {
-                return a.last - b.last, a.first - b.first;
+    if (req.params.search) {
+        db.searchUser(req.params.search)
+            .then((results) => {
+                //console.log("results in search", results.rows);
+                if (results.rows.length == 0) {
+                    res.json({ searchSuccess: false });
+                } else {
+                    ///use list.sort to reorganize the list
+                    results.rows.sort(function (a, b) {
+                        return a.last - b.last, a.first - b.first;
+                    });
+                    //console.log("results after sort", results.rows);
+                    res.json({ data: results.rows, searchSuccess: true });
+                }
+            })
+            .catch((err) => {
+                console.log("error in search", err);
+                res.json({ searchSuccess: false });
             });
-            //console.log("results after sort", results.rows);
-            res.json({ data: results.rows, searchSuccess: true });
-        })
-        .catch((err) => {
-            console.log("error in search", err);
-        });
+    } else {
+        console.log("no input yet");
+        res.json({ searchSuccess: true });
+    }
 });
 
 app.get("/logout", (req, res) => {

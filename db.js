@@ -74,6 +74,6 @@ module.exports.searchUser = (val) => {
     let q = "SELECT * FROM users WHERE first ILIKE $1 OR last ILIKE $1";
 
     let params = [val + "%"];
-    console.log("params in searchUser: ", params);
+    //console.log("params in searchUser: ", params);
     return db.query(q, params);
 };

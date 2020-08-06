@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import axios from "./axios";
+import Friendbutton from "./friendbutton";
 //import { Link, BrowserRouter } from "react-router-dom";
 
 class OtherUser extends React.Component {
