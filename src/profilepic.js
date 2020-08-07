@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function Profilepic(props) {
     let { first, last, url, toggleUpload } = props;
@@ -13,6 +13,8 @@ export default function Profilepic(props) {
                 className={props.pPicClass}
                 toggleUpload={toggleUpload}
             />
+
+            {/*<button onClick={toggleUpload}>Add photo</button>*/}
         </React.Fragment>
     );
 }

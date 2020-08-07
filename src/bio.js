@@ -59,7 +59,6 @@ class Bio extends React.Component {
                 //if (this.mode === "view") {
                 (elem = (
                     <div>
-                        <h3>About Me</h3>
                         <p>{this.props.bio}</p>
                         <button onClick={(e) => this.editBio(e)}>
                             Edit bio!
@@ -85,12 +84,7 @@ class Bio extends React.Component {
                     </div>
                 ));
         }
-        return (
-            <div>
-                <h1>Bio sanity check!</h1>
-                {elem}
-            </div>
-        );
+        return <div className="bio_container">{elem}</div>;
     }
 }
 

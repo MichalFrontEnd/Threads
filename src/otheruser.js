@@ -44,7 +44,7 @@ class OtherUser extends React.Component {
     render() {
         let url = this.state.url || "/default.jpg";
         return (
-            <div className="user_card">
+            <div className="profile_layout">
                 {this.state.error && (
                     <h2 className="error">Not a valid user.</h2>
                 )}

@@ -17,10 +17,10 @@ export default function Profile(props) {
 
     //console.log("props in Profile: ", props);
     return (
-        <div className="user_card">
-            <h1 className="username">
-                <span>Hey,{""}</span> {first} {last}!
-            </h1>
+        <div className="profile_layout">
+            <div className="cover_container">
+                <img className="cover_photo" src="/Japanshop.jpg" />
+            </div>
 
             <Profilepic
                 first={first}
@@ -29,7 +29,11 @@ export default function Profile(props) {
                 toggleUpload={toggleUpload}
                 pPicClass="profile_pic"
             />
-            <button onClick={props.toggleUpload}>Add photo</button>
+
+            <h1 className="username">
+                <span>Hey,{""}</span> {first} {last}!
+            </h1>
+            {/*<button onClick={props.toggleUpload}>Add photo</button>*/}
             {uploaderIsVisible && (
                 <Uploader url={url} imageUpdate={imageUpdate} />
             )}

@@ -26,16 +26,6 @@ export default function Friendbutton(props) {
         axios
             .post(`/friendreq/${buttonText}`, { id: props.id })
             .then(({ data }) => {
-                //console.log("data in friendreq: ", data.accepted);
-                //if (data.deleted) {
-                //    setButtonText("Connect!");
-                //} else if (data.accepted == true) {
-                //    console.log("I made it to if");
-                //    setButtonText("Disconnect");
-                //} else if (!data.accepted) {
-                //    console.log("I landed in else");
-                //    setButtonText("Cancel");
-                //}
                 console.log("data.button: ", data);
                 setButtonText(data.button);
             });

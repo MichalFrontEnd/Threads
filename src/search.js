@@ -52,7 +52,7 @@ export default function Search(props) {
                     })}
             </div>
             <div className="user_search">
-                <h3>Not who you are looking for?</h3>
+                <h3>Not who you&apos;re looking for?</h3>
                 <label>Search:</label>
                 <input
                     type="text"
@@ -81,7 +81,7 @@ export default function Search(props) {
                         })}
                     {error && (
                         <div className="error">
-                            No results for this search, sorry :/(/.
+                            No results for this search, sorry :/.
                         </div>
                     )}
                 </div>
