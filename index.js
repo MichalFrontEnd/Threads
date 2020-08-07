@@ -288,7 +288,7 @@ app.get("/showusers", (req, res) => {
 });
 
 app.get("/search:search", (req, res) => {
-    console.log("req.params in search: ", req.params.search);
+    //console.log("req.params in search: ", req.params.search);
     if (req.params.search) {
         db.searchUser(req.params.search)
             .then((results) => {
@@ -311,6 +311,95 @@ app.get("/search:search", (req, res) => {
     } else {
         console.log("no input yet");
         res.json({ searchSuccess: true });
+    }
+});
+
+app.get("/friendreq/:id", (req, res) => {
+    //console.log("req.params.id in friendreq: ", req.params.id);
+    //console.log("req.session.user_id in friendreq: ", req.session.user_id);
+    const viewer = req.session.user_id;
+    const viewee = req.params.id;
+    //console.log("page mounted before db q");
+    ///if the results are empty it means there is no relationship. a relationship makes a row.
+    db.checkFriendship(viewer, viewee)
+        .then((results) => {
+            //console.log("results in checkFriendship", results.rows);
+
+            //console.log(
+            //    "results.rows[0].length > 0 : ",
+            //    results.rows.length > 0
+            //);
+            //console.log(
+            //    "results.rows[0].accepted == false: ",
+            //    results.rows[0].accepted == false
+            //);
+            if (results.rows.length === 0) {
+                res.json({ button: "Connect!" });
+            } else if (
+                results.rows.length > 0 &&
+                results.rows[0].accepted == true
+            ) {
+                //console.log(
+                //    "results.rows in button-to-disconnect: ",
+                //    results.rows
+                //);
+                //console.log("button should be disconnect");
+                res.json({ button: "Disconnect" });
+            } else if (
+                results.rows.length > 0 &&
+                results.rows[0].accepted == false
+            ) {
+                if (req.params.id == results.rows[0].sender_id) {
+                    res.json({
+                        button: "Cancel",
+                    });
+                } else if (req.params.id == results.rows[0].rec_id) {
+                    res.json({ button: "Accept" });
+                }
+            }
+        })
+        .catch((err) => {
+            console.log("error in checkFriendship", err);
+        });
+});
+
+app.post("/friendreq/:status", (req, res) => {
+    console.log("req.params in friendreq/status: ", req.params);
+    //console.log("req.body in friendreq/status: ", req.body);
+    const viewer = req.session.user_id;
+    const viewee = req.body.id;
+    ////have if that will check the params to know which db query to do:
+
+    //If sent friend request
+    if (req.params.status == "Connect!") {
+        db.friendRequest(viewer, viewee)
+            .then((results) => {
+                console.log("results in checkFriendship", results.rows);
+                res.json({ button: "Cancel" });
+            })
+            .catch((err) => {
+                console.log("error in friendreq/:status", err);
+            });
+    } else if (req.params.status == "Accept") {
+        //console.log("Do I actually know I'm here?!");
+        db.acceptRequest(viewer, viewee)
+            .then((results) => {
+                //console.log("did I accept friendship?");
+                //console.log("results in acceptFriendship", results);
+                res.json({ button: "Disconnect", friendshipadd: "success" });
+            })
+            .catch((err) => {
+                console.log("error in acceptFriendship", err);
+            });
+    } else if (
+        req.params.status == "Disconnect" ||
+        req.params.status == "Cancel"
+    ) {
+        db.deleteFriendship(viewer, viewee).then((results) => {
+            //console.log("results in deleteFriendship: ", results);
+            //console.log("DId it delete?");
+            res.json({ button: "Connect!" });
+        });
     }
 });
 

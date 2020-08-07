@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, Route, BrowserRouter, HashRouter } from "react-router-dom";
 import axios from "./axios";
-import OtherUser from "./otheruser";
+//import OtherUser from "./otheruser";
 
 export default function Search(props) {
     const [lastUsers, setLastUsers] = useState([]);

@@ -45,7 +45,7 @@ module.exports.updatePassword = (email, pwd) => {
 };
 
 module.exports.getUserInfo = (id) => {
-    let q = "SELECT first, last, bio, url FROM users WHERE id = $1";
+    let q = "SELECT first, last, email, bio, url FROM users WHERE id = $1";
 
     let params = [id];
     //console.log("params in getUserInfo: ", params);
@@ -75,5 +75,39 @@ module.exports.searchUser = (val) => {
 
     let params = [val + "%"];
     //console.log("params in searchUser: ", params);
+    return db.query(q, params);
+};
+
+module.exports.checkFriendship = (sender_id, rec_id) => {
+    let q = `SELECT * FROM friendships WHERE(rec_id = $1 AND sender_id = $2) 
+    OR(rec_id = $2 AND sender_id = $1)`;
+
+    let params = [sender_id, rec_id];
+    return db.query(q, params);
+};
+
+module.exports.friendRequest = (sender_id, rec_id) => {
+    let q =
+        "INSERT INTO friendships (sender_id, rec_id) VALUES ($1, $2) RETURNING accepted";
+
+    let params = [sender_id, rec_id];
+    return db.query(q, params);
+};
+
+module.exports.acceptRequest = (sender_id, rec_id) => {
+    let q =
+        "UPDATE friendships SET accepted = true WHERE sender_id=$2 and rec_id=$1 RETURNING accepted";
+
+    let params = [sender_id, rec_id];
+    //console.log("params in acceptRequest: ", params);
+    return db.query(q, params);
+};
+
+module.exports.deleteFriendship = (sender_id, rec_id) => {
+    let q =
+        "DELETE FROM friendships WHERE sender_id=$1 AND rec_id=$2 AND rec_id = $2 AND sender_id = $1";
+
+    let params = [sender_id, rec_id];
+    console.log("params in deleteFriendship: ", params);
     return db.query(q, params);
 };

@@ -6,15 +6,18 @@ import Friendbutton from "./friendbutton";
 class OtherUser extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            id: this.props.match.params.id,
+            //viewer: null,
+        };
     }
     componentDidMount() {
-        const id = this.props.match.params.id;
-        console.log(
-            "this.props.match.params in OtherUser mount: ",
-            this.props.match.params
-        );
-        axios.get(`/switch/user/${id}`, id).then(({ data }) => {
+        //const id = this.props.match.params.id;
+        //console.log(
+        //    "this.props.match.params in OtherUser mount: ",
+        //    this.props.match.params
+        //);
+        axios.get(`/switch/user/${this.state.id}`).then(({ data }) => {
             console.log("data in GET ouser", data);
             if (data.sameUser) {
                 this.props.history.push("/app");
@@ -53,6 +56,10 @@ class OtherUser extends React.Component {
                     className="user_image"
                     src={url}
                     alt={(this.state.first, this.state.last)}
+                />
+                <Friendbutton
+                    id={this.state.id}
+                    // viewer={this.state.viewer}
                 />
                 <p>{this.state.bio}</p>
             </div>
