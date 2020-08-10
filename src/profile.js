@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Profilepic from "./profilepic";
 import Uploader from "./uploader";
 import Bio from "./bio";
@@ -14,6 +14,7 @@ export default function Profile(props) {
         imageUpdate,
         bioUpdate,
     } = props;
+    const [isShown, setIsShown] = useState(false);
 
     //console.log("props in Profile: ", props);
     return (
@@ -21,19 +22,35 @@ export default function Profile(props) {
             <div className="cover_container">
                 <img className="cover_photo" src="/Japanshop.jpg" />
             </div>
+            <div
+                className="pro_pic_container"
+                onMouseEnter={() => setIsShown(true)}
+                onMouseLeave={() => setIsShown(false)}
+            >
+                <Profilepic
+                    first={first}
+                    last={last}
+                    url={url}
+                    toggleUpload={toggleUpload}
+                    pPicClass="profile_pic"
+                />
+            </div>
 
-            <Profilepic
-                first={first}
-                last={last}
-                url={url}
-                toggleUpload={toggleUpload}
-                pPicClass="profile_pic"
-            />
-
+            {isShown && (
+                <div
+                    className="overlay"
+                    onMouseEnter={() => setIsShown(true)}
+                    onMouseLeave={() => setIsShown(false)}
+                >
+                    {/*<button className="photo_add" onClick={props.toggleUpload}>
+                        Add photo
+                    </button>*/}
+                </div>
+            )}
             <h1 className="username">
                 <span>Hey,{""}</span> {first} {last}!
             </h1>
-            {/*<button onClick={props.toggleUpload}>Add photo</button>*/}
+
             {uploaderIsVisible && (
                 <Uploader url={url} imageUpdate={imageUpdate} />
             )}

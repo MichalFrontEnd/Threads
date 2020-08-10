@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 export default function Profilepic(props) {
     let { first, last, url, toggleUpload } = props;
+    //const [isShown, setIsShown] = useState(false);
     //console.log("props in Profilepic: ", props);
     url = url || "default.jpg";
     return (

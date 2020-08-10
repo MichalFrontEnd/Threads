@@ -8,13 +8,16 @@ export default function Header(props) {
     return (
         <header>
             <Logo />
-            <Link to="/usersearch" className="searcher">
+            <Link to="/usersearch" className="header_links searcher">
                 🔎
             </Link>
-            <a className="logout" href="/logout">
+            <Link to="/friends" className="header_links friends">
+                Friends
+            </Link>
+            <a className="header_links logout" href="/logout">
                 Log Out
             </a>
-            <Link to="/" className="header_home">
+            <Link to="/" className="header_link header_home">
                 <Profilepic
                     first={props.first}
                     last={props.last}

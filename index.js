@@ -364,7 +364,7 @@ app.get("/friendreq/:id", (req, res) => {
 });
 
 app.post("/friendreq/:status", (req, res) => {
-    console.log("req.params in friendreq/status: ", req.params);
+    //console.log("req.params in friendreq/status: ", req.params);
     //console.log("req.body in friendreq/status: ", req.body);
     const viewer = req.session.user_id;
     const viewee = req.body.id;
@@ -374,7 +374,7 @@ app.post("/friendreq/:status", (req, res) => {
     if (req.params.status == "Connect!") {
         db.friendRequest(viewer, viewee)
             .then((results) => {
-                console.log("results in checkFriendship", results.rows);
+                //console.log("results in checkFriendship", results.rows);
                 res.json({ button: "Cancel" });
             })
             .catch((err) => {
@@ -382,11 +382,13 @@ app.post("/friendreq/:status", (req, res) => {
             });
     } else if (req.params.status == "Accept") {
         //console.log("Do I actually know I'm here?!");
+        console.log("viewee: ", viewee);
+        //console.log("req.params.id: ", req.params.id);
         db.acceptRequest(viewer, viewee)
             .then((results) => {
                 //console.log("did I accept friendship?");
-                //console.log("results in acceptFriendship", results);
-                res.json({ button: "Disconnect", friendshipadd: "success" });
+                //console.log("results in acceptFriendship", results.rows);
+                res.json({ button: "Disconnect", id: viewee });
             })
             .catch((err) => {
                 console.log("error in acceptFriendship", err);
@@ -395,12 +397,24 @@ app.post("/friendreq/:status", (req, res) => {
         req.params.status == "Disconnect" ||
         req.params.status == "Cancel"
     ) {
-        db.deleteFriendship(viewer, viewee).then((results) => {
+        db.deleteFriendship(viewer, viewee).then(() => {
             //console.log("results in deleteFriendship: ", results);
             //console.log("DId it delete?");
             res.json({ button: "Connect!" });
         });
     }
+});
+
+app.get("/groupies", (req, res) => {
+    //console.log("friends sanity check");
+    db.checkGroupies(req.session.user_id)
+        .then((results) => {
+            //console.log("results in checkGroupies: ", results.rows);
+            res.json({ data: results.rows });
+        })
+        .catch((err) => {
+            console.log("error on CheckGroupies", err);
+        });
 });
 
 app.get("/logout", (req, res) => {
@@ -410,12 +424,12 @@ app.get("/logout", (req, res) => {
 
 app.get("*", function (req, res) {
     if (!req.session.user_id) {
-        res.redirect("/");
+        res.redirect("/welcome");
     } else {
         res.sendFile(__dirname + "/index.html");
     }
 });
 
-app.listen(8080, function () {
+app.listen(3000, function () {
     console.log("Thready, steady, go.");
 });

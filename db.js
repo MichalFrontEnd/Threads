@@ -108,6 +108,19 @@ module.exports.deleteFriendship = (sender_id, rec_id) => {
         "DELETE FROM friendships WHERE sender_id=$1 AND rec_id=$2 AND rec_id = $2 AND sender_id = $1";
 
     let params = [sender_id, rec_id];
-    console.log("params in deleteFriendship: ", params);
+    //console.log("params in deleteFriendship: ", params);
+    return db.query(q, params);
+};
+
+module.exports.checkGroupies = (id) => {
+    const q = `
+  SELECT users.id, first, last, url, accepted
+  FROM friendships
+  JOIN users
+  ON (accepted = false AND rec_id = $1 AND sender_id = users.id)
+  OR (accepted = true AND rec_id = $1 AND sender_id = users.id)
+  OR (accepted = true AND sender_id = $1 AND rec_id = users.id)
+`;
+    let params = [id];
     return db.query(q, params);
 };

@@ -5,11 +5,9 @@ export default function Friendbutton(props) {
     //console.log("props in Friendbutton: ", props);
     const [buttonText, setButtonText] = useState("Connect!");
     //const [reqButton, setReqButton] = useState();
-    const [viewerButton, setViewerButton] = useState("Connect!");
-    const [viewer, setViewer] = useState("");
 
     useEffect(() => {
-        console.log("useEffect sanity check");
+        //console.log("useEffect sanity check");
         axios
             .get(`/friendreq/${props.id}`)
             .then(({ data }) => {

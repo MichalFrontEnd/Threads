@@ -32,7 +32,7 @@ export default function Search(props) {
     const userSearch = (e) => {
         setUserInput(e.target.value);
     };
-    console.log("userInput: ", userInput);
+    //console.log("userInput: ", userInput);
     return (
         <div>
             <h2>Here are our latest joiners!</h2>
@@ -61,10 +61,10 @@ export default function Search(props) {
                     onChange={userSearch}
                 />
 
-                <div className="res_container">
-                    {searchRes &&
-                        searchRes.map((person, i) => {
-                            return (
+                {searchRes &&
+                    searchRes.map((person, i) => {
+                        return (
+                            <div className="res_container" key={i}>
                                 <Link
                                     to={`/person/${person.id}`}
                                     key={i}
@@ -77,14 +77,15 @@ export default function Search(props) {
                                         </p>
                                     </div>
                                 </Link>
-                            );
-                        })}
-                    {error && (
-                        <div className="error">
-                            No results for this search, sorry :/.
-                        </div>
-                    )}
-                </div>
+                            </div>
+                        );
+                    })}
+                {error && (
+                    <div className="error">
+                        No results for this search, sorry :/.
+                    </div>
+                )}
+
                 {/*<button onClick=>Submit</button>*/}
             </div>
         </div>

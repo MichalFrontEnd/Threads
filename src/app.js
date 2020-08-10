@@ -5,6 +5,7 @@ import axios from "./axios";
 import Profile from "./profile";
 import OtherUser from "./otheruser";
 import Search from "./search";
+import Friends from "./friends";
 import { Link, BrowserRouter, Route } from "react-router-dom";
 
 class App extends React.Component {
@@ -75,6 +76,7 @@ class App extends React.Component {
                         toggleUpload={this.doNothing}
                     />
                     <Route path="/usersearch" component={Search} />
+                    <Route path="/friends" component={Friends} />
                 </div>
                 <div>
                     <Route
