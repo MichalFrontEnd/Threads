@@ -2,9 +2,9 @@ import React, { useState } from "react";
 
 export default function Profilepic(props) {
     let { first, last, url, toggleUpload } = props;
-    //const [isShown, setIsShown] = useState(false);
-    //console.log("props in Profilepic: ", props);
+
     url = url || "default.jpg";
+
     return (
         <React.Fragment>
             <img
@@ -12,7 +12,7 @@ export default function Profilepic(props) {
                 alt={(first, last)}
                 onClick={toggleUpload}
                 className={props.pPicClass}
-                toggleUpload={toggleUpload}
+                //toggleUpload={toggleUpload}
             />
 
             {/*<button onClick={toggleUpload}>Add photo</button>*/}

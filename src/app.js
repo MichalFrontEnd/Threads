@@ -24,6 +24,7 @@ class App extends React.Component {
                 last: data.data.last,
                 bio: data.data.bio,
                 url: data.data.url,
+                coverphoto: data.data.coverphoto,
             });
         });
     }
@@ -88,6 +89,7 @@ class App extends React.Component {
                                 last={this.state.last}
                                 url={this.state.url}
                                 bio={this.state.bio}
+                                coverphoto={this.state.coverphoto}
                                 uploaderIsVisible={this.state.uploaderIsVisible}
                                 toggleUpload={this.toggleUpload}
                                 imageUpdate={(e) => {

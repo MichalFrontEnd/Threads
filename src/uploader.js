@@ -42,16 +42,17 @@ class Uploader extends React.Component {
     render() {
         return (
             <Fragment>
-                <h1>I am the Uploader sanity check</h1>;
-                <input
-                    name="file"
-                    type="file"
-                    onChange={(e) => this.inputChange(e)}
-                    accept="image/*"
-                />
-                <button onClick={(e) => this.photoUpload(e)}>
-                    Upload photo
-                </button>
+                <div className="uploader">
+                    <input
+                        name="file"
+                        type="file"
+                        onChange={(e) => this.inputChange(e)}
+                        accept="image/*"
+                    />
+                    <button onClick={(e) => this.photoUpload(e)}>
+                        Upload photo
+                    </button>
+                </div>
             </Fragment>
         );
     }

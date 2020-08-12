@@ -13,6 +13,7 @@ CREATE TABLE users(
     pwd VARCHAR(255) NOT NULL,
     bio VARCHAR(255),
     url VARCHAR(255),
+    coverphoto VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

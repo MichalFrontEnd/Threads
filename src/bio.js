@@ -50,7 +50,12 @@ class Bio extends React.Component {
         if (!this.props.bio) {
             elem = (
                 <div>
-                    <button onClick={(e) => this.toggleBio(e)}>Add bio!</button>
+                    <button
+                        className="bio_button"
+                        onClick={(e) => this.toggleBio(e)}
+                    >
+                        Add bio!
+                    </button>
                 </div>
             );
         }
@@ -60,7 +65,10 @@ class Bio extends React.Component {
                 (elem = (
                     <div>
                         <p>{this.props.bio}</p>
-                        <button onClick={(e) => this.editBio(e)}>
+                        <button
+                            className="bio_button"
+                            onClick={(e) => this.editBio(e)}
+                        >
                             Edit bio!
                         </button>
                     </div>
@@ -72,13 +80,17 @@ class Bio extends React.Component {
                 (elem = (
                     <div>
                         <textarea
+                            className="bio_container"
                             name="bio"
-                            rows="10"
+                            rows="5"
                             cols="30"
                             value={this.state.value}
                             onChange={(e) => this.bioChange(e)}
                         ></textarea>
-                        <button onClick={(e) => this.sendBio(e)}>
+                        <button
+                            className="bio_button"
+                            onClick={(e) => this.sendBio(e)}
+                        >
                             Submit!
                         </button>
                     </div>

@@ -1,6 +1,8 @@
 import React, { Fragment } from "react";
 import axios from "./axios";
 import Friendbutton from "./friendbutton";
+import Coverphoto from "./coverphoto";
+
 //import { Link, BrowserRouter } from "react-router-dom";
 
 class OtherUser extends React.Component {
@@ -20,7 +22,7 @@ class OtherUser extends React.Component {
         axios.get(`/switch/user/${this.state.id}`).then(({ data }) => {
             console.log("data in GET ouser", data);
             if (data.sameUser) {
-                this.props.history.push("/app");
+                this.props.history.push("/");
             }
             if (!data.getInfoSuccess) {
                 this.setState({
@@ -33,6 +35,7 @@ class OtherUser extends React.Component {
                         last: data.data.last,
                         url: data.data.url,
                         bio: data.data.bio,
+                        coverphoto: data.data.coverphoto,
                     }
                     //() => {
                     //    console.log("setState sanity check", this.state);
@@ -48,15 +51,19 @@ class OtherUser extends React.Component {
                 {this.state.error && (
                     <h2 className="error">Not a valid user.</h2>
                 )}
-
+                <div className="cover_container">
+                    <Coverphoto />
+                </div>
                 <h1 className="username">
                     {this.state.first} {this.state.last}
                 </h1>
-                <img
-                    className="user_image"
-                    src={url}
-                    alt={(this.state.first, this.state.last)}
-                />
+                <div className="pro_pic_container">
+                    <img
+                        className="user_image"
+                        src={url}
+                        alt={(this.state.first, this.state.last)}
+                    />
+                </div>
                 <Friendbutton
                     id={this.state.id}
                     // viewer={this.state.viewer}

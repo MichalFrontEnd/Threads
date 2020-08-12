@@ -2,7 +2,7 @@ import axios from "./axios";
 
 export async function getGroupies() {
     const { data } = await axios.get("/groupies");
-
+    console.log("data in getGroupies: ", data);
     return {
         type: "GET_GROUPIES",
         groupies: data.data,

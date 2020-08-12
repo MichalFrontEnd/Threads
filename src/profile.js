@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Profilepic from "./profilepic";
 import Uploader from "./uploader";
 import Bio from "./bio";
+import Coverphoto from "./coverphoto";
 
 export default function Profile(props) {
     let {
@@ -15,17 +16,29 @@ export default function Profile(props) {
         bioUpdate,
     } = props;
     const [isShown, setIsShown] = useState(false);
+    //const [hasFrame, setHasFrame] = useState(false);
+    //const toggleFrame = () => setHasFrame(!hasFrame);
 
-    //console.log("props in Profile: ", props);
     return (
-        <div className="profile_layout">
+        <div
+            className="profile_layout"
+            onMouseEnter={(e) => {
+                setIsShown(false);
+            }}
+        >
             <div className="cover_container">
-                <img className="cover_photo" src="/Japanshop.jpg" />
+                <Coverphoto />
             </div>
             <div
                 className="pro_pic_container"
-                onMouseEnter={() => setIsShown(true)}
-                onMouseLeave={() => setIsShown(false)}
+                //{hasFrame ? "frame_hover" : ""}
+                onMouseEnter={(e) => {
+                    setIsShown(true);
+                }}
+                onMouseLeave={(e) => {
+                    setIsShown(false);
+                    //toggleFrame;
+                }}
             >
                 <Profilepic
                     first={first}
@@ -37,24 +50,26 @@ export default function Profile(props) {
             </div>
 
             {isShown && (
-                <div
-                    className="overlay"
-                    onMouseEnter={() => setIsShown(true)}
-                    onMouseLeave={() => setIsShown(false)}
+                <button
+                    className="photo_add"
+                    onClick={props.toggleUpload}
+                    onMouseEnter={(e) => {
+                        setIsShown(true);
+                    }}
                 >
-                    {/*<button className="photo_add" onClick={props.toggleUpload}>
-                        Add photo
-                    </button>*/}
-                </div>
+                    Upload new photo
+                </button>
             )}
-            <h1 className="username">
-                <span>Hey,{""}</span> {first} {last}!
-            </h1>
 
             {uploaderIsVisible && (
                 <Uploader url={url} imageUpdate={imageUpdate} />
             )}
-            <Bio bio={bio} bioUpdate={bioUpdate} />
+            <div className="user_info">
+                <h1 className="username">
+                    {first} {last}
+                </h1>
+                <Bio bio={bio} bioUpdate={bioUpdate} />
+            </div>
         </div>
     );
 }
