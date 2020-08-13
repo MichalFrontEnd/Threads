@@ -124,3 +124,10 @@ module.exports.checkGroupies = (id) => {
     let params = [id];
     return db.query(q, params);
 };
+
+module.exports.getChatHistory = () => {
+    const q =
+        "SELECT chat_messages.id, message, ts, first, last FROM chat_messages LEFT JOIN users ON users.id=chat_messages.sender_id ORDER BY chat_messages.id DESC LIMIT 10";
+
+    return db.query(q);
+};

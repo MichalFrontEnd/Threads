@@ -3,6 +3,9 @@
 --
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS pwd_codes CASCADE;
+DROP TABLE IF EXISTS friendships CASCADE;
+DROP TABLE IF EXISTS chat_messages CASCADE;
+
 
 
 CREATE TABLE users(
@@ -24,9 +27,16 @@ CREATE TABLE pwd_codes(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-DROP TABLE IF EXISTS friendships CASCADE;
 CREATE TABLE friendships( 
      id SERIAL PRIMARY KEY,
      sender_id INT REFERENCES users(id) NOT NULL,
      rec_id INT REFERENCES users(id) NOT NULL,
      accepted BOOLEAN DEFAULT false);
+
+
+     CREATE TABLE chat_messages(
+    id SERIAL PRIMARY KEY,
+    message VARCHAR NOT NULL CHECK (message <> ''),
+    sender_id INT NOT NULL REFERENCES users(id),
+    ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

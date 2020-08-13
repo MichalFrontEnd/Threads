@@ -27,3 +27,10 @@ export async function deleteFriend(id) {
         id,
     };
 }
+
+export async function chatHistory(history) {
+    return {
+        type: "CHAT_HISTORY",
+        history,
+    };
+}

@@ -6,12 +6,9 @@ export default function reducer(state = {}, actions) {
     }
 
     if (actions.type == "ACCEPT_FRIEND") {
-        //console.log("state.pending: ", state.groupies);
         state = {
             ...state,
             groupies: state.groupies.map((user) => {
-                //console.log("user.id: ", user.id);
-                //console.log("actions.id: ", actions.id);
                 if (user.id == actions.id) {
                     return {
                         ...user,
@@ -30,6 +27,18 @@ export default function reducer(state = {}, actions) {
             ...state,
             groupies: state.groupies.filter((user) => user.id != actions.id),
         };
+    }
+
+    if (actions.type == "CHAT_HISTORY") {
+        state = Object.assign({}, state, {
+            history: actions.history,
+        });
+        //state = {
+        //    ...state,
+        //    history: actions.history,
+        //};
+
+        console.log("state.history: ", state.history);
     }
 
     return state;

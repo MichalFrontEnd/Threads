@@ -1,4 +1,5 @@
-main {
+main,
+.header_container {
     /*width: 90vw;*/
     height: 100vh;
     display: flex;
@@ -48,7 +49,8 @@ button {
 .logout,
 .searcher,
 .header_logo,
-.friends {
+.friends,
+.chat {
     align-self: center;
     justify-self: center;
 }
@@ -61,11 +63,15 @@ button {
 }
 
 .friends {
-    grid-area: 1 / 7 / span 1 / span 1;
+    grid-area: 1 / 6 / span 1 / span 1;
 }
 
 .searcher {
-    grid-area: 1 / 6 / span 1 / span 1;
+    grid-area: 1 / 5 / span 1 / span 1;
+}
+
+.chat {
+    grid-area: 1 / 7 / span 1 / span 1;
 }
 
 .profile_layout {
@@ -203,4 +209,31 @@ button {
     width: 10em;
     object-fit: cover;
     object-position: top;
+}
+
+.chat_layout {
+    background-color: rgba(154, 129, 168, 0.2);
+    height: 80vh;
+    width: 60vw;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.chat_window {
+    background-color: #fff;
+    height: 60%;
+    width: 70%;
+    align-self: center;
+}
+
+.chat_input {
+    height: 15%;
+    width: 70%;
+    align-self: center;
+}
+
+.chat_layout button {
+    align-self: flex-end;
 }

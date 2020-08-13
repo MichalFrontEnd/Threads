@@ -6,6 +6,7 @@ import Profile from "./profile";
 import OtherUser from "./otheruser";
 import Search from "./search";
 import Friends from "./friends";
+import Chat from "./chat";
 import { Link, BrowserRouter, Route } from "react-router-dom";
 
 class App extends React.Component {
@@ -69,7 +70,7 @@ class App extends React.Component {
         }
         return (
             <BrowserRouter>
-                <div>
+                <div className="header_container">
                     <Header
                         first={this.state.first}
                         last={this.state.last}
@@ -78,8 +79,9 @@ class App extends React.Component {
                     />
                     <Route path="/usersearch" component={Search} />
                     <Route path="/friends" component={Friends} />
+                    <Route path="/chat" component={Chat} />
                 </div>
-                <div>
+                <div className="app_container">
                     <Route
                         exact
                         path="/"

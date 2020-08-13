@@ -14,6 +14,9 @@ export default function Header(props) {
             <Link to="/friends" className="header_links friends">
                 Friends
             </Link>
+            <Link to="/chat" className="header_links chat">
+                Chat
+            </Link>
             <a className="header_links logout" href="/logout">
                 Log Out
             </a>

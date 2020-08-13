@@ -6,29 +6,33 @@ const { hash, compare } = require("./bc");
 const db = require("./db");
 const s3 = require("./s3");
 const { s3Url } = require("./config");
-app.use(compression());
 const { sendEmail } = require("./ses");
+const server = require("http").Server(app);
+const io = require("socket.io")(server, { origins: "localhost:3000" });
+const cookieSessionMW = cookieSession({
+    secret: "Let's get artsy!",
+    maxAge: 1000 * 60 * 60 * 24 * 14,
+});
 
-app.use(
-    cookieSession({
-        secret: "Let's get artsy!",
-        maxAge: 1000 * 60 * 60 * 24 * 14,
-    })
-);
+app.use(compression());
+
+app.use(cookieSessionMW);
+io.use(function (socket, next) {
+    cookieSessionMW(socket.request, socket.request.res, next);
+});
 
 app.use(express.static("./public"));
-//app.use(express.static("./"));
 
 app.use(express.urlencoded({ extended: false }));
 
 app.use(express.json());
 
-//app.use(require("csurf")());
+app.use(require("csurf")());
 
-//app.use((req, res, next) => {
-//    res.cookie("myToken", req.csrfToken());
-//    next();
-//});
+app.use((req, res, next) => {
+    res.cookie("myToken", req.csrfToken());
+    next();
+});
 
 ///////FIle UPLOAD BOILERPLATE DON'T TOUCH!!//////
 const multer = require("multer");
@@ -65,6 +69,37 @@ if (process.env.NODE_ENV != "production") {
 } else {
     app.use("/bundle.js", (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
+
+io.on("connection", (socket) => {
+    console.log(`socket with the id ${socket.id} is now CONNECTED`);
+    //socket.on("yo", (data) => {
+    //    console.log(data);
+    //    io.emit("yoyo", { msg: "loved it!" });
+    //});
+    const { user_id } = socket.request.session;
+
+    if (!user_id) {
+        return socket.disconnect();
+    }
+
+    db.getChatHistory()
+        .then(({ rows }) => {
+            if (rows.length === 0) {
+                //console.log("no messages!");
+                socket.emit("chatHistory", "no messages!");
+            } else {
+                console.log("results.rows in getChatHistory", rows);
+                io.emit("chatHistory", { rows });
+            }
+        })
+        .catch((err) => {
+            console.log("error in getChatHistory: ", err);
+        });
+    console.log("user_id sanity check: ", user_id);
+    socket.on("disconnect", function () {
+        console.log(`socket with the id ${socket.id} is now DISCONNECTED`);
+    });
+});
 
 app.get("/welcome", (req, res) => {
     if (req.session.user_id) {
@@ -373,7 +408,7 @@ app.post("/friendreq/:status", (req, res) => {
     //If sent friend request
     if (req.params.status == "Connect!") {
         db.friendRequest(viewer, viewee)
-            .then((results) => {
+            .then(() => {
                 //console.log("results in checkFriendship", results.rows);
                 res.json({ button: "Cancel" });
             })
@@ -385,7 +420,7 @@ app.post("/friendreq/:status", (req, res) => {
         console.log("viewee: ", viewee);
         //console.log("req.params.id: ", req.params.id);
         db.acceptRequest(viewer, viewee)
-            .then((results) => {
+            .then(() => {
                 //console.log("did I accept friendship?");
                 //console.log("results in acceptFriendship", results.rows);
                 res.json({ button: "Disconnect", id: viewee });
@@ -430,6 +465,6 @@ app.get("*", function (req, res) {
     }
 });
 
-app.listen(3000, function () {
+server.listen(3000, function () {
     console.log("Thready, steady, go.");
 });
