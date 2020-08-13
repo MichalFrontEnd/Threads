@@ -127,7 +127,24 @@ module.exports.checkGroupies = (id) => {
 
 module.exports.getChatHistory = () => {
     const q =
-        "SELECT chat_messages.id, message, ts, first, last FROM chat_messages LEFT JOIN users ON users.id=chat_messages.sender_id ORDER BY chat_messages.id DESC LIMIT 10";
+        "SELECT message, ts, first, last, url FROM chat_messages LEFT JOIN users ON users.id=chat_messages.sender_id ORDER BY chat_messages.id DESC LIMIT 10";
 
     return db.query(q);
+};
+
+module.exports.storeMessage = (id, msg) => {
+    const q =
+        "INSERT INTO chat_messages (sender_id, message) VALUES ($1, $2) RETURNING *";
+    let params = [id, msg];
+    console.log("params in storeMessage: ", params);
+    return db.query(q, params);
+};
+
+module.exports.displayMessage = (msg_id) => {
+    const q =
+        "SELECT message, ts, first, last, url FROM chat_messages LEFT JOIN users ON users.id=chat_messages.sender_id WHERE chat_messages.id=$1";
+
+    let params = [msg_id];
+    console.log("params: ", params);
+    return db.query(q, params);
 };

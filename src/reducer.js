@@ -38,8 +38,24 @@ export default function reducer(state = {}, actions) {
         //    history: actions.history,
         //};
 
-        console.log("state.history: ", state.history);
+        //console.log("state.history: ", state.history);
     }
+
+    if (actions.type == "SEND_MESSAGE") {
+        state = {
+            ...state,
+            chatInput: actions.chatInput,
+        };
+    }
+    //console.log("state.chatInput: ", state.chatInput);
+
+    if (actions.type == "DISPLAY_MSG") {
+        state = {
+            ...state,
+            msg: actions.msg,
+        };
+    }
+    //console.log("state.msg: ", state.msg);
 
     return state;
 }

@@ -1,4 +1,5 @@
 import axios from "./axios";
+import { socket } from "./socket";
 
 export async function getGroupies() {
     const { data } = await axios.get("/groupies");
@@ -28,9 +29,25 @@ export async function deleteFriend(id) {
     };
 }
 
-export async function chatHistory(history) {
+export function chatHistory(history) {
     return {
         type: "CHAT_HISTORY",
         history,
+    };
+}
+
+export function sendMessage(chatInput) {
+    socket.emit("chatInput", chatInput);
+    return {
+        type: "SEND_MESSAGE",
+        chatInput,
+    };
+}
+
+export function displayMsg(msg) {
+    //console.log("msg: ", msg);
+    return {
+        type: "DISPLAY_MSG",
+        msg,
     };
 }

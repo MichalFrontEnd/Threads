@@ -89,13 +89,26 @@ io.on("connection", (socket) => {
                 socket.emit("chatHistory", "no messages!");
             } else {
                 console.log("results.rows in getChatHistory", rows);
-                io.emit("chatHistory", { rows });
+                socket.emit("chatHistory", rows);
             }
         })
         .catch((err) => {
             console.log("error in getChatHistory: ", err);
         });
-    console.log("user_id sanity check: ", user_id);
+    socket.on("chatInput", (data) => {
+        //console.log("data in chatInput: ", data);
+        //console.log("user_id: ", user_id);
+        db.storeMessage(user_id, data.userInput).then((results) => {
+            //console.log("results in chatInput: ", results);
+            const lastMsgId = results.rows[0].id;
+            //console.log("lastMsgId: ", lastMsgId);
+            db.displayMessage(lastMsgId).then(({ rows }) => {
+                console.log("rows in displayMessages", rows);
+                io.emit("displayMsg", rows);
+            });
+        });
+    });
+    //console.log("user_id sanity check: ", user_id);
     socket.on("disconnect", function () {
         console.log(`socket with the id ${socket.id} is now DISCONNECTED`);
     });
