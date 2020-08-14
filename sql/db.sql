@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS pwd_codes CASCADE;
 DROP TABLE IF EXISTS friendships CASCADE;
 DROP TABLE IF EXISTS chat_messages CASCADE;
+DROP TABLE IF EXISTS wall_posts CASCADE;
 
 
 
@@ -34,9 +35,17 @@ CREATE TABLE friendships(
      accepted BOOLEAN DEFAULT false);
 
 
-     CREATE TABLE chat_messages(
+CREATE TABLE chat_messages(
     id SERIAL PRIMARY KEY,
     message VARCHAR NOT NULL CHECK (message <> ''),
     sender_id INT NOT NULL REFERENCES users(id),
+    ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE wall_posts(
+    id SERIAL PRIMARY KEY,
+    content VARCHAR NOT NULL CHECK (content <> ''),
+    sender_id INT NOT NULL REFERENCES users(id),
+    rec_id INT REFERENCES users(id) NOT NULL,
     ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

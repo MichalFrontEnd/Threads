@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 //const elemRef = useRef();
 
-export default function Chat(props) {
+export default function Chat() {
     const dispatch = useDispatch();
     const inputRef = useRef("");
     const chatWindowRef = useRef();
@@ -21,8 +21,8 @@ export default function Chat(props) {
             chatWindowRef.current.scrollHeight -
             chatWindowRef.current.clientHeight;
     };
-    console.log("msg: ", msg);
-    console.log("history: ", history);
+    //console.log("msg: ", msg);
+    //console.log("history: ", history);
     useEffect(() => {
         scrollToBottom();
     });

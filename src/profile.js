@@ -3,6 +3,7 @@ import Profilepic from "./profilepic";
 import Uploader from "./uploader";
 import Bio from "./bio";
 import Coverphoto from "./coverphoto";
+import Wallposts from "./wallposts";
 
 export default function Profile(props) {
     let {
@@ -69,6 +70,7 @@ export default function Profile(props) {
                     {first} {last}
                 </h1>
                 <Bio bio={bio} bioUpdate={bioUpdate} />
+                <Wallposts />
             </div>
         </div>
     );

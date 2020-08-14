@@ -8,7 +8,7 @@ const s3 = require("./s3");
 const { s3Url } = require("./config");
 const { sendEmail } = require("./ses");
 const server = require("http").Server(app);
-const io = require("socket.io")(server, { origins: "localhost:3000" });
+const io = require("socket.io")(server, { origins: "localhost:8080" });
 const cookieSessionMW = cookieSession({
     secret: "Let's get artsy!",
     maxAge: 1000 * 60 * 60 * 24 * 14,
@@ -70,11 +70,12 @@ if (process.env.NODE_ENV != "production") {
     app.use("/bundle.js", (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
 
-app.use((req, res, next) => {
-    console.log("is this working?");
-    console.log("req.url test: ", req.url);
-    next();
-});
+//app.use((req, res, next) => {
+//    console.log("is this working?");
+//    console.log("req.url test: ", req.url);
+//    next();
+//});
+
 app.get("/welcome", (req, res) => {
     if (req.session.user_id) {
         res.redirect("/");
@@ -164,7 +165,7 @@ app.post("/checkemail", (req, res) => {
                 db.storeCode(req.body.email, secretCode)
                     .then(() => {
                         sendEmail(
-                            "miyako.front@gmail.com",
+                            req.body.email,
                             results.rows[0].first,
                             secretCode,
                             "Reset password"
@@ -271,11 +272,11 @@ app.get("/switch/user/:id", (req, res) => {
     //console.log("req.params: ", req.params.id);
     db.getUserInfo(req.params.id)
         .then((results) => {
-            console.log("results in GET ouser", results.rows[0]);
+            //console.log("results in GET ouser", results.rows[0]);
             if (!results.rows[0]) {
                 res.json({ getInfoSuccess: false });
             } else {
-                res.json({ data: results.rows[0] });
+                res.json({ data: results.rows[0], getInfoSuccess: true });
             }
         })
         .catch((err) => {
@@ -318,7 +319,7 @@ app.get("/search:search", (req, res) => {
                 res.json({ searchSuccess: false });
             });
     } else {
-        console.log("no input yet");
+        //console.log("no input yet");
         res.json({ searchSuccess: true });
     }
 });
@@ -328,31 +329,31 @@ app.get("/friendreq/:id", (req, res) => {
     //console.log("req.session.user_id in friendreq: ", req.session.user_id);
     const viewer = req.session.user_id;
     const viewee = req.params.id;
-    console.log("page mounted before db q");
+    //console.log("page mounted before db q");
     ///if the results are empty it means there is no relationship. a relationship makes a row.
     db.checkFriendship(viewer, viewee)
         .then((results) => {
-            console.log("results in checkFriendship", results.rows);
+            //console.log("results in checkFriendship", results.rows);
 
             //console.log(
             //    "results.rows[0].length > 0 : ",
             //    results.rows.length > 0
             //);
-            console.log(
-                "results.rows[0].accepted == false: ",
-                results.rows[0].accepted == false
-            );
+            //console.log(
+            //    "results.rows[0].accepted == false: ",
+            //    results.rows[0].accepted == false
+            //);
             if (results.rows.length === 0) {
                 res.json({ button: "Connect!" });
             } else if (
                 results.rows.length > 0 &&
                 results.rows[0].accepted == true
             ) {
-                console.log(
-                    "results.rows in button-to-disconnect: ",
-                    results.rows
-                );
-                console.log("button should be disconnect");
+                //console.log(
+                //    "results.rows in button-to-disconnect: ",
+                //    results.rows
+                //);
+                //console.log("button should be disconnect");
                 res.json({ button: "Disconnect" });
             } else if (
                 results.rows.length > 0 &&
@@ -373,8 +374,8 @@ app.get("/friendreq/:id", (req, res) => {
 });
 
 app.post("/friendreq/:status", (req, res) => {
-    console.log("req.params in friendreq/status: ", req.params);
-    console.log("Is my axios post hapenning?");
+    //console.log("req.params in friendreq/status: ", req.params);
+
     //console.log("req.body in friendreq/status: ", req.body);
     const viewer = req.session.user_id;
     const viewee = req.body.id;
@@ -384,7 +385,7 @@ app.post("/friendreq/:status", (req, res) => {
     if (req.params.status == "Connect!") {
         db.friendRequest(viewer, viewee)
             .then((results) => {
-                console.log("results in checkFriendship", results.rows);
+                //console.log("results in checkFriendship", results.rows);
                 res.json({ button: "Cancel" });
             })
             .catch((err) => {
@@ -397,7 +398,7 @@ app.post("/friendreq/:status", (req, res) => {
         db.acceptRequest(viewer, viewee)
             .then((results) => {
                 //console.log("did I accept friendship?");
-                console.log("results in acceptFriendship", results.rows);
+                //console.log("results in acceptFriendship", results.rows);
                 res.json({ button: "Disconnect", id: viewee });
             })
             .catch((err) => {
@@ -407,9 +408,8 @@ app.post("/friendreq/:status", (req, res) => {
         req.params.status == "Disconnect" ||
         req.params.status == "Cancel"
     ) {
-        console.log("do I recognize the button text?");
         db.deleteFriendship(viewer, viewee).then((results) => {
-            console.log("results in deleteFriendship: ", results.rows);
+            //console.log("results in deleteFriendship: ", results.rows);
             //console.log("DId it delete?");
             res.json({ button: "Connect!" });
         });
@@ -428,6 +428,42 @@ app.get("/groupies", (req, res) => {
         });
 });
 
+app.post("/post/user/:id", (req, res) => {
+    console.log("req.params:", req.params.id);
+    console.log("req.body: ", req.body);
+    console.log("req.params.id: ", req.params.id);
+    const poster = req.session.user_id;
+    let postee;
+    if (req.params.id === "undefined") {
+        postee = poster;
+    } else {
+        postee = req.params.id;
+    }
+    console.log("poster: ", poster);
+    console.log("postee: ", postee);
+    db.addNewPost(poster, postee, req.body.wallInput)
+        .then((results) => {
+            console.log(results.rows[0]);
+            const lastPostId = results.rows[0].id;
+            db.displayPost(lastPostId)
+                .then((results) => {
+                    console.log(
+                        "results.rows[0] in displayPost: ",
+                        results.rows[0]
+                    );
+                })
+                .catch((err) => {
+                    console.log("error in displayPost: ", err);
+                });
+        })
+        .catch((err) => {
+            console.log("error in addNewPost: ", err);
+        });
+
+    //const viewer = req.session.user_id;
+    //const viewee = req.body.id;
+});
+
 app.get("/logout", (req, res) => {
     req.session = null;
     res.redirect("/*");
@@ -441,7 +477,7 @@ app.get("*", function (req, res) {
     }
 });
 
-server.listen(3000, function () {
+server.listen(8080, function () {
     console.log("Thready, steady, go.");
 });
 

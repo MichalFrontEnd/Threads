@@ -58,5 +58,13 @@ export default function reducer(state = {}, actions) {
     }
     //console.log("state.msg: ", state.msg);
 
+    //if (actions.type == "SEND_POST") {
+    //    state = {
+    //        ...state,
+    //        post: actions.post,
+    //    };
+    //}
+    //console.log("state.post: ", state.post);
+
     return state;
 }

@@ -105,7 +105,7 @@ module.exports.acceptRequest = (sender_id, rec_id) => {
 
 module.exports.deleteFriendship = (sender_id, rec_id) => {
     let q =
-        "DELETE FROM friendships WHERE sender_id=$1 AND rec_id=$2 AND rec_id = $2 AND sender_id = $1";
+        "DELETE FROM friendships WHERE sender_id=$1 AND rec_id=$2 OR rec_id = $1 AND sender_id = $2";
 
     let params = [sender_id, rec_id];
     //console.log("params in deleteFriendship: ", params);
@@ -145,6 +145,30 @@ module.exports.displayMessage = (msg_id) => {
         "SELECT message, ts, first, last, url, users.id FROM chat_messages LEFT JOIN users ON users.id=chat_messages.sender_id WHERE chat_messages.id=$1";
 
     let params = [msg_id];
+    console.log("params: ", params);
+    return db.query(q, params);
+};
+
+module.exports.getPosts = (posteeId) => {
+    const q =
+        "SELECT content, ts, first, last, url, users.id FROM wall_posts LEFT JOIN users ON users.id=wall_posts.sender_id WHERE users.id =$1 ORDER BY wall_posts.id DESC";
+    let params = [posteeId];
+    return db.query(q, params);
+};
+
+module.exports.addNewPost = (poster, postee, content) => {
+    let q =
+        "INSERT INTO wall_posts (sender_id, rec_id, content) VALUES ($1, $2, $3) RETURNING *";
+    let params = [poster, postee, content];
+    console.log("params in addnewPost: ", params);
+    return db.query(q, params);
+};
+
+module.exports.displayPost = (post_id) => {
+    const q =
+        "SELECT content, ts, first, last, url, users.id FROM wall_posts LEFT JOIN users ON users.id=wall_posts.sender_id WHERE wall_posts.id=$1";
+
+    let params = [post_id];
     console.log("params: ", params);
     return db.query(q, params);
 };

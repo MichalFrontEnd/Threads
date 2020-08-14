@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import axios from "./axios";
 import Friendbutton from "./friendbutton";
 import Coverphoto from "./coverphoto";
+import Wallposts from "./wallposts";
 
 //import { Link, BrowserRouter } from "react-router-dom";
 
@@ -69,6 +70,7 @@ class OtherUser extends React.Component {
                     // viewer={this.state.viewer}
                 />
                 <p>{this.state.bio}</p>
+                <Wallposts id={this.state.id} />
             </div>
         );
     }

@@ -52,3 +52,12 @@ export function displayMsg(msg) {
         msg,
     };
 }
+
+//export function sendPost(post) {
+//    console.log("post: ", post);
+//    axios.post("/user/post", { post });
+//    return {
+//        type: "SEND_POST",
+//        post,
+//    };
+//}
