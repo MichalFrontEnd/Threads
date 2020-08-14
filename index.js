@@ -429,9 +429,8 @@ app.get("/groupies", (req, res) => {
 });
 
 app.post("/post/user/:id", (req, res) => {
-    console.log("req.params:", req.params.id);
-    console.log("req.body: ", req.body);
-    console.log("req.params.id: ", req.params.id);
+    //console.log("req.body: ", req.body);
+    //console.log("req.params.id: ", req.params.id);
     const poster = req.session.user_id;
     let postee;
     if (req.params.id === "undefined") {
@@ -443,14 +442,15 @@ app.post("/post/user/:id", (req, res) => {
     console.log("postee: ", postee);
     db.addNewPost(poster, postee, req.body.wallInput)
         .then((results) => {
-            console.log(results.rows[0]);
+            //console.log(results.rows[0]);
             const lastPostId = results.rows[0].id;
             db.displayPost(lastPostId)
                 .then((results) => {
                     console.log(
-                        "results.rows[0] in displayPost: ",
+                        "results.rows in displayPost: ",
                         results.rows[0]
                     );
+                    res.json(results.rows[0]);
                 })
                 .catch((err) => {
                     console.log("error in displayPost: ", err);
@@ -500,7 +500,7 @@ io.on("connection", (socket) => {
                 socket.emit("chatHistory", "no messages!");
             } else {
                 //console.log("results.rows in getChatHistory", rows);
-                socket.emit("chatHistory", rows);
+                socket.emit("chatHistory", rows.reverse());
             }
         })
         .catch((err) => {
@@ -511,11 +511,11 @@ io.on("connection", (socket) => {
         //console.log("user_id: ", user_id);
         db.storeMessage(user_id, data).then((results) => {
             //console.log("results in chatInput: ", results);
-            const lastMsgId = results.rows[0].id;
+            //const lastMsgId = results.rows[0].id;
             //console.log("lastMsgId: ", lastMsgId);
-            db.displayMessage(lastMsgId).then(({ rows }) => {
+            db.displayMessage().then(({ rows }) => {
                 //console.log("rows in displayMessages", rows);
-                io.emit("displayMsg", rows);
+                io.emit("displayMsg", rows[0]);
             });
         });
     });

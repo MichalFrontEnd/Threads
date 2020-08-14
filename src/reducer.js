@@ -22,7 +22,7 @@ export default function reducer(state = {}, actions) {
     }
 
     if (actions.type == "DELETE_FRIEND") {
-        console.log("state.pending: ", state.groupies);
+        //console.log("state.pending: ", state.groupies);
         state = {
             ...state,
             groupies: state.groupies.filter((user) => user.id != actions.id),
@@ -34,12 +34,6 @@ export default function reducer(state = {}, actions) {
             ...state,
             history: actions.history,
         };
-        //state = {
-        //    ...state,
-        //    history: actions.history,
-        //};
-
-        //console.log("state.history: ", state.history);
     }
 
     if (actions.type == "SEND_MESSAGE") {
@@ -53,18 +47,10 @@ export default function reducer(state = {}, actions) {
     if (actions.type == "DISPLAY_MSG") {
         state = {
             ...state,
-            msg: actions.msg,
+            history: [...state.history, actions.msg],
         };
     }
-    //console.log("state.msg: ", state.msg);
-
-    //if (actions.type == "SEND_POST") {
-    //    state = {
-    //        ...state,
-    //        post: actions.post,
-    //    };
-    //}
-    //console.log("state.post: ", state.post);
+    //console.log("state.history after DISPLAY_MSG: ", state.history);
 
     return state;
 }

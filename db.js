@@ -140,13 +140,11 @@ module.exports.storeMessage = (id, msg) => {
     return db.query(q, params);
 };
 
-module.exports.displayMessage = (msg_id) => {
+module.exports.displayMessage = () => {
     const q =
-        "SELECT message, ts, first, last, url, users.id FROM chat_messages LEFT JOIN users ON users.id=chat_messages.sender_id WHERE chat_messages.id=$1";
+        "SELECT message, ts, first, last, url, users.id FROM chat_messages LEFT JOIN users ON users.id=chat_messages.sender_id ORDER BY chat_messages.id DESC LIMIT 1";
 
-    let params = [msg_id];
-    console.log("params: ", params);
-    return db.query(q, params);
+    return db.query(q);
 };
 
 module.exports.getPosts = (posteeId) => {

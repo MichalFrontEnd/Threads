@@ -12,7 +12,7 @@ export default function Friendbutton(props) {
             .get(`/friendreq/${props.id}`)
             .then(
                 ({ data }) => {
-                    console.log("data.button: ", data.button);
+                    //console.log("data.button: ", data.button);
                     setButtonText(data.button);
                 },
                 () => {
@@ -24,12 +24,12 @@ export default function Friendbutton(props) {
 
     const requestHandler = () => {
         //setButtonText("Cancel :(");
-        console.log("buttonText before post: ", buttonText);
+        //console.log("buttonText before post: ", buttonText);
 
         axios
             .post(`/friendreq/${buttonText}`, { id: props.id })
             .then(({ data }) => {
-                console.log("data.button: ", data);
+                //console.log("data.button: ", data);
                 setButtonText(data.button);
             });
     };

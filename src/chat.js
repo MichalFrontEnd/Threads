@@ -15,7 +15,7 @@ export default function Chat() {
     //will have to do something else when there are actual results
     const history = useSelector((state) => state.history);
 
-    const msg = useSelector((state) => state.msg);
+    //const msg = useSelector((state) => state.msg);
     const scrollToBottom = () => {
         chatWindowRef.current.scrollTop =
             chatWindowRef.current.scrollHeight -
@@ -48,7 +48,7 @@ export default function Chat() {
             <h1>Chat</h1>
             <div className="chat_window" ref={chatWindowRef}>
                 {history &&
-                    history.reverse().map((history, i) => {
+                    history.map((history, i) => {
                         return (
                             <div className="chat_msg" key={i}>
                                 <img src={history.url} />
@@ -64,7 +64,7 @@ export default function Chat() {
                         );
                     })}
 
-                {msg &&
+                {/*{msg &&
                     msg.map((msg, i) => {
                         return (
                             <div className="chat_msg" key={i}>
@@ -79,7 +79,7 @@ export default function Chat() {
                                 <p>{msg.message}</p>
                             </div>
                         );
-                    })}
+                    })}*/}
             </div>
             <textarea
                 className="chat_input"

@@ -18,7 +18,9 @@ export default function Wallposts(props) {
     function newPost() {
         //dispatch(sendPost(inputRef.current.value));
         //setUserInput("");
-        axios.post(`/post/user/${props.id}`, { wallInput });
+        axios.post(`/post/user/${props.id}`, { wallInput }).then(({ data }) => {
+            console.log("data after sending post back to FE: ", data);
+        });
         setWallInput("");
     }
 

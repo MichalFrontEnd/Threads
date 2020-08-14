@@ -21,7 +21,7 @@ export default class Login extends React.Component {
                 pwd: this.state.pwd,
             })
             .then(({ data }) => {
-                console.log("data in login POST: ", data);
+                //console.log("data in login POST: ", data);
                 if (data.loginSuccess) {
                     location.replace("/");
                 } else {
