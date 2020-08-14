@@ -37,6 +37,12 @@ export default function Chat(props) {
         inputRef.current.value = "";
     }
 
+    function checkEnter(e) {
+        if (e.keyCode === 13) {
+            newMessage();
+        }
+    }
+
     return (
         <div className="chat_layout">
             <h1>Chat</h1>
@@ -80,6 +86,7 @@ export default function Chat(props) {
                 type="text"
                 onChange={(e) => chatInput(e)}
                 ref={inputRef}
+                onKeyDown={(e) => checkEnter(e)}
             ></textarea>
             <button
                 onClick={() => {

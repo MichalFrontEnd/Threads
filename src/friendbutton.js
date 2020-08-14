@@ -10,17 +10,22 @@ export default function Friendbutton(props) {
         //console.log("useEffect sanity check");
         axios
             .get(`/friendreq/${props.id}`)
-            .then(({ data }) => {
-                //console.log("data.data in checkfriendship: ", data);
-                console.log("data.button: ", data);
-
-                setButtonText(data.button);
-            })
+            .then(
+                ({ data }) => {
+                    console.log("data.button: ", data.button);
+                    setButtonText(data.button);
+                },
+                () => {
+                    //console.log("buttonText: ", buttonText);
+                }
+            )
             .catch((err) => console.log("err in friendreq mount", err));
     }, []);
 
     const requestHandler = () => {
         //setButtonText("Cancel :(");
+        console.log("buttonText before post: ", buttonText);
+
         axios
             .post(`/friendreq/${buttonText}`, { id: props.id })
             .then(({ data }) => {

@@ -136,7 +136,7 @@ module.exports.storeMessage = (id, msg) => {
     const q =
         "INSERT INTO chat_messages (sender_id, message) VALUES ($1, $2) RETURNING *";
     let params = [id, msg];
-    console.log("params in storeMessage: ", params);
+    //console.log("params in storeMessage: ", params);
     return db.query(q, params);
 };
 

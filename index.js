@@ -70,50 +70,11 @@ if (process.env.NODE_ENV != "production") {
     app.use("/bundle.js", (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
 
-io.on("connection", (socket) => {
-    console.log(`socket with the id ${socket.id} is now CONNECTED`);
-    //socket.on("yo", (data) => {
-    //    console.log(data);
-    //    io.emit("yoyo", { msg: "loved it!" });
-    //});
-    const { user_id } = socket.request.session;
-
-    if (!user_id) {
-        return socket.disconnect();
-    }
-
-    db.getChatHistory()
-        .then(({ rows }) => {
-            if (rows.length === 0) {
-                //console.log("no messages!");
-                socket.emit("chatHistory", "no messages!");
-            } else {
-                //console.log("results.rows in getChatHistory", rows);
-                socket.emit("chatHistory", rows);
-            }
-        })
-        .catch((err) => {
-            console.log("error in getChatHistory: ", err);
-        });
-    socket.on("chatInput", (data) => {
-        console.log("data in chatInput: ", data);
-        //console.log("user_id: ", user_id);
-        db.storeMessage(user_id, data).then((results) => {
-            //console.log("results in chatInput: ", results);
-            const lastMsgId = results.rows[0].id;
-            //console.log("lastMsgId: ", lastMsgId);
-            db.displayMessage(lastMsgId).then(({ rows }) => {
-                //console.log("rows in displayMessages", rows);
-                io.emit("displayMsg", rows);
-            });
-        });
-    });
-    //console.log("user_id sanity check: ", user_id);
-    socket.on("disconnect", function () {
-        console.log(`socket with the id ${socket.id} is now DISCONNECTED`);
-    });
+app.use((req, res, next) => {
+    console.log("is this working?");
+    console.log("req.url test: ", req.url);
+    next();
 });
-
 app.get("/welcome", (req, res) => {
     if (req.session.user_id) {
         res.redirect("/");
@@ -310,11 +271,11 @@ app.get("/switch/user/:id", (req, res) => {
     //console.log("req.params: ", req.params.id);
     db.getUserInfo(req.params.id)
         .then((results) => {
-            //console.log("results in GET ouser", results.rows[0]);
+            console.log("results in GET ouser", results.rows[0]);
             if (!results.rows[0]) {
                 res.json({ getInfoSuccess: false });
             } else {
-                res.json({ data: results.rows[0], getInfoSuccess: true });
+                res.json({ data: results.rows[0] });
             }
         })
         .catch((err) => {
@@ -367,16 +328,16 @@ app.get("/friendreq/:id", (req, res) => {
     //console.log("req.session.user_id in friendreq: ", req.session.user_id);
     const viewer = req.session.user_id;
     const viewee = req.params.id;
-    //console.log("page mounted before db q");
+    console.log("page mounted before db q");
     ///if the results are empty it means there is no relationship. a relationship makes a row.
     db.checkFriendship(viewer, viewee)
         .then((results) => {
             console.log("results in checkFriendship", results.rows);
 
-            console.log(
-                "results.rows[0].length > 0 : ",
-                results.rows.length > 0
-            );
+            //console.log(
+            //    "results.rows[0].length > 0 : ",
+            //    results.rows.length > 0
+            //);
             console.log(
                 "results.rows[0].accepted == false: ",
                 results.rows[0].accepted == false
@@ -413,6 +374,7 @@ app.get("/friendreq/:id", (req, res) => {
 
 app.post("/friendreq/:status", (req, res) => {
     console.log("req.params in friendreq/status: ", req.params);
+    console.log("Is my axios post hapenning?");
     //console.log("req.body in friendreq/status: ", req.body);
     const viewer = req.session.user_id;
     const viewee = req.body.id;
@@ -421,8 +383,8 @@ app.post("/friendreq/:status", (req, res) => {
     //If sent friend request
     if (req.params.status == "Connect!") {
         db.friendRequest(viewer, viewee)
-            .then(() => {
-                //console.log("results in checkFriendship", results.rows);
+            .then((results) => {
+                console.log("results in checkFriendship", results.rows);
                 res.json({ button: "Cancel" });
             })
             .catch((err) => {
@@ -433,9 +395,9 @@ app.post("/friendreq/:status", (req, res) => {
         //console.log("viewee: ", viewee);
         //console.log("req.params.id: ", req.params.id);
         db.acceptRequest(viewer, viewee)
-            .then(() => {
+            .then((results) => {
                 //console.log("did I accept friendship?");
-                //console.log("results in acceptFriendship", results.rows);
+                console.log("results in acceptFriendship", results.rows);
                 res.json({ button: "Disconnect", id: viewee });
             })
             .catch((err) => {
@@ -445,8 +407,9 @@ app.post("/friendreq/:status", (req, res) => {
         req.params.status == "Disconnect" ||
         req.params.status == "Cancel"
     ) {
-        db.deleteFriendship(viewer, viewee).then(() => {
-            //console.log("results in deleteFriendship: ", results);
+        console.log("do I recognize the button text?");
+        db.deleteFriendship(viewer, viewee).then((results) => {
+            console.log("results in deleteFriendship: ", results.rows);
             //console.log("DId it delete?");
             res.json({ button: "Connect!" });
         });
@@ -480,4 +443,48 @@ app.get("*", function (req, res) {
 
 server.listen(3000, function () {
     console.log("Thready, steady, go.");
+});
+
+io.on("connection", (socket) => {
+    console.log(`socket with the id ${socket.id} is now CONNECTED`);
+    //socket.on("yo", (data) => {
+    //    console.log(data);
+    //    io.emit("yoyo", { msg: "loved it!" });
+    //});
+    const { user_id } = socket.request.session;
+
+    if (!user_id) {
+        return socket.disconnect();
+    }
+
+    db.getChatHistory()
+        .then(({ rows }) => {
+            if (rows.length === 0) {
+                //console.log("no messages!");
+                socket.emit("chatHistory", "no messages!");
+            } else {
+                //console.log("results.rows in getChatHistory", rows);
+                socket.emit("chatHistory", rows);
+            }
+        })
+        .catch((err) => {
+            console.log("error in getChatHistory: ", err);
+        });
+    socket.on("chatInput", (data) => {
+        //console.log("data in chatInput: ", data);
+        //console.log("user_id: ", user_id);
+        db.storeMessage(user_id, data).then((results) => {
+            //console.log("results in chatInput: ", results);
+            const lastMsgId = results.rows[0].id;
+            //console.log("lastMsgId: ", lastMsgId);
+            db.displayMessage(lastMsgId).then(({ rows }) => {
+                //console.log("rows in displayMessages", rows);
+                io.emit("displayMsg", rows);
+            });
+        });
+    });
+    //console.log("user_id sanity check: ", user_id);
+    socket.on("disconnect", function () {
+        console.log(`socket with the id ${socket.id} is now DISCONNECTED`);
+    });
 });
