@@ -99,7 +99,7 @@ module.exports.acceptRequest = (sender_id, rec_id) => {
         "UPDATE friendships SET accepted = true WHERE sender_id=$2 and rec_id=$1 RETURNING accepted";
 
     let params = [sender_id, rec_id];
-    //console.log("params in acceptRequest: ", params);
+    console.log("params in acceptRequest: ", params);
     return db.query(q, params);
 };
 
@@ -127,7 +127,7 @@ module.exports.checkGroupies = (id) => {
 
 module.exports.getChatHistory = () => {
     const q =
-        "SELECT message, ts, first, last, url FROM chat_messages LEFT JOIN users ON users.id=chat_messages.sender_id ORDER BY chat_messages.id DESC LIMIT 10";
+        "SELECT message, ts, first, last, url, users.id FROM chat_messages LEFT JOIN users ON users.id=chat_messages.sender_id ORDER BY chat_messages.id DESC LIMIT 10";
 
     return db.query(q);
 };
@@ -142,7 +142,7 @@ module.exports.storeMessage = (id, msg) => {
 
 module.exports.displayMessage = (msg_id) => {
     const q =
-        "SELECT message, ts, first, last, url FROM chat_messages LEFT JOIN users ON users.id=chat_messages.sender_id WHERE chat_messages.id=$1";
+        "SELECT message, ts, first, last, url, users.id FROM chat_messages LEFT JOIN users ON users.id=chat_messages.sender_id WHERE chat_messages.id=$1";
 
     let params = [msg_id];
     console.log("params: ", params);

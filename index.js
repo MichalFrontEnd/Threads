@@ -27,12 +27,12 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(express.json());
 
-app.use(require("csurf")());
+//app.use(require("csurf")());
 
-app.use((req, res, next) => {
-    res.cookie("myToken", req.csrfToken());
-    next();
-});
+//app.use((req, res, next) => {
+//    res.cookie("myToken", req.csrfToken());
+//    next();
+//});
 
 ///////FIle UPLOAD BOILERPLATE DON'T TOUCH!!//////
 const multer = require("multer");
@@ -88,7 +88,7 @@ io.on("connection", (socket) => {
                 //console.log("no messages!");
                 socket.emit("chatHistory", "no messages!");
             } else {
-                console.log("results.rows in getChatHistory", rows);
+                //console.log("results.rows in getChatHistory", rows);
                 socket.emit("chatHistory", rows);
             }
         })
@@ -96,14 +96,14 @@ io.on("connection", (socket) => {
             console.log("error in getChatHistory: ", err);
         });
     socket.on("chatInput", (data) => {
-        //console.log("data in chatInput: ", data);
+        console.log("data in chatInput: ", data);
         //console.log("user_id: ", user_id);
-        db.storeMessage(user_id, data.userInput).then((results) => {
+        db.storeMessage(user_id, data).then((results) => {
             //console.log("results in chatInput: ", results);
             const lastMsgId = results.rows[0].id;
             //console.log("lastMsgId: ", lastMsgId);
             db.displayMessage(lastMsgId).then(({ rows }) => {
-                console.log("rows in displayMessages", rows);
+                //console.log("rows in displayMessages", rows);
                 io.emit("displayMsg", rows);
             });
         });
@@ -291,7 +291,7 @@ app.post("/photoupld", uploader.single("file"), s3.upload, (req, res) => {
 });
 
 app.post("/updatebio", (req, res) => {
-    console.log("req.body in updatebio: ", req.body);
+    //console.log("req.body in updatebio: ", req.body);
 
     db.bioUpdate(req.session.user_id, req.body.bio)
         .then((results) => {
@@ -371,27 +371,27 @@ app.get("/friendreq/:id", (req, res) => {
     ///if the results are empty it means there is no relationship. a relationship makes a row.
     db.checkFriendship(viewer, viewee)
         .then((results) => {
-            //console.log("results in checkFriendship", results.rows);
+            console.log("results in checkFriendship", results.rows);
 
-            //console.log(
-            //    "results.rows[0].length > 0 : ",
-            //    results.rows.length > 0
-            //);
-            //console.log(
-            //    "results.rows[0].accepted == false: ",
-            //    results.rows[0].accepted == false
-            //);
+            console.log(
+                "results.rows[0].length > 0 : ",
+                results.rows.length > 0
+            );
+            console.log(
+                "results.rows[0].accepted == false: ",
+                results.rows[0].accepted == false
+            );
             if (results.rows.length === 0) {
                 res.json({ button: "Connect!" });
             } else if (
                 results.rows.length > 0 &&
                 results.rows[0].accepted == true
             ) {
-                //console.log(
-                //    "results.rows in button-to-disconnect: ",
-                //    results.rows
-                //);
-                //console.log("button should be disconnect");
+                console.log(
+                    "results.rows in button-to-disconnect: ",
+                    results.rows
+                );
+                console.log("button should be disconnect");
                 res.json({ button: "Disconnect" });
             } else if (
                 results.rows.length > 0 &&
@@ -412,7 +412,7 @@ app.get("/friendreq/:id", (req, res) => {
 });
 
 app.post("/friendreq/:status", (req, res) => {
-    //console.log("req.params in friendreq/status: ", req.params);
+    console.log("req.params in friendreq/status: ", req.params);
     //console.log("req.body in friendreq/status: ", req.body);
     const viewer = req.session.user_id;
     const viewee = req.body.id;
@@ -430,7 +430,7 @@ app.post("/friendreq/:status", (req, res) => {
             });
     } else if (req.params.status == "Accept") {
         //console.log("Do I actually know I'm here?!");
-        console.log("viewee: ", viewee);
+        //console.log("viewee: ", viewee);
         //console.log("req.params.id: ", req.params.id);
         db.acceptRequest(viewer, viewee)
             .then(() => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, Route, BrowserRouter, HashRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "./axios";
 //import OtherUser from "./otheruser";
 
@@ -17,14 +17,9 @@ export default function Search(props) {
         });
 
         axios.get(`/search${userInput || "+"}`).then(({ data }) => {
-            //console.log("data in search", data);
             setsearchRes(data.data);
-            //setError(data.searchSuccess);
-            //console.log("inside the if");
-            userInput && setError(!data.searchSuccess);
 
-            //console.log("data.searchSuccess: ", data.searchSuccess);
-            //console.log("inside the else");
+            userInput && setError(!data.searchSuccess);
         });
         setsearchRes("");
     }, [userInput]);
@@ -32,7 +27,7 @@ export default function Search(props) {
     const userSearch = (e) => {
         setUserInput(e.target.value);
     };
-    //console.log("userInput: ", userInput);
+
     return (
         <div>
             <h2>Here are our latest joiners!</h2>
@@ -60,26 +55,24 @@ export default function Search(props) {
                     value={userInput}
                     onChange={userSearch}
                 />
-
-                {searchRes &&
-                    searchRes.map((person, i) => {
-                        return (
-                            <div className="res_container" key={i}>
-                                <Link
-                                    to={`/person/${person.id}`}
-                                    key={i}
-                                    className="last_persons"
-                                >
-                                    <div className="person">
-                                        <img src={person.url} />
-                                        <p>
-                                            {`${person.first} ${person.last}`}
-                                        </p>
-                                    </div>
-                                </Link>
-                            </div>
-                        );
-                    })}
+                <div></div>
+                <div className="res_container">
+                    {searchRes &&
+                        searchRes.map((person, i) => {
+                            return (
+                                <div key={i}>
+                                    <Link to={`/user/${person.id}`} key={i}>
+                                        <div className="person">
+                                            <img src={person.url} />
+                                            <p>
+                                                {`${person.first} ${person.last}`}
+                                            </p>
+                                        </div>
+                                    </Link>
+                                </div>
+                            );
+                        })}
+                </div>
                 {error && (
                     <div className="error">
                         No results for this search, sorry :/.

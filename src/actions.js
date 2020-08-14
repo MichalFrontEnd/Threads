@@ -37,6 +37,7 @@ export function chatHistory(history) {
 }
 
 export function sendMessage(chatInput) {
+    //console.log("chatInput: ", chatInput);
     socket.emit("chatInput", chatInput);
     return {
         type: "SEND_MESSAGE",

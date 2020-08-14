@@ -30,9 +30,10 @@ export default function reducer(state = {}, actions) {
     }
 
     if (actions.type == "CHAT_HISTORY") {
-        state = Object.assign({}, state, {
+        state = {
+            ...state,
             history: actions.history,
-        });
+        };
         //state = {
         //    ...state,
         //    history: actions.history,

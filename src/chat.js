@@ -1,49 +1,57 @@
 import * as io from "socket.io-client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { socket } from "./socket";
 import { useDispatch, useSelector } from "react-redux";
 import { sendMessage } from "./actions";
+import { Link } from "react-router-dom";
+
 //const elemRef = useRef();
 
 export default function Chat(props) {
     const dispatch = useDispatch();
-    const [userInput, setUserInput] = useState("");
-    let [chatInput, setChatInput] = useState("");
-
+    const inputRef = useRef("");
+    const chatWindowRef = useRef();
+    //let [chatInput, setChatInput] = useState("");
     //will have to do something else when there are actual results
     const history = useSelector((state) => state.history);
 
     const msg = useSelector((state) => state.msg);
-    //console.log("msg: ", msg);
-    //console.log("history: ", history);
-    useEffect(() => {}, []);
-    chatInput = (e) => {
-        setUserInput(e.target.value);
+    const scrollToBottom = () => {
+        chatWindowRef.current.scrollTop =
+            chatWindowRef.current.scrollHeight -
+            chatWindowRef.current.clientHeight;
+    };
+    console.log("msg: ", msg);
+    console.log("history: ", history);
+    useEffect(() => {
+        scrollToBottom();
+    });
+
+    const chatInput = (e) => {
+        inputRef.current.value = e.target.value;
     };
 
     function newMessage() {
-        dispatch(sendMessage({ userInput }));
-        setChatInput("");
+        dispatch(sendMessage(inputRef.current.value));
+        //setUserInput("");
+        inputRef.current.value = "";
     }
-
-    //console.log("userInput: ", userInput);
-    //console.log("chatInput: ", chatInput);
 
     return (
         <div className="chat_layout">
-            <h1>Chat Sanity Check</h1>
-            <div className="chat_window">
+            <h1>Chat</h1>
+            <div className="chat_window" ref={chatWindowRef}>
                 {history &&
-                    history.map((history, i) => {
+                    history.reverse().map((history, i) => {
                         return (
-                            <div className="chat_history" key={i}>
-                                <img
-                                    src={history.url}
-                                    height="50px"
-                                    width="50px"
-                                />
+                            <div className="chat_msg" key={i}>
+                                <img src={history.url} />
                                 <h5>
-                                    {`${history.first} ${history.last} on ${history.ts}`}
+                                    <Link to={`/user/${history.id}`}>
+                                        {history.first} {history.last}
+                                    </Link>
+
+                                    {`  on ${history.ts}`}
                                 </h5>
                                 <p>{history.message}</p>
                             </div>
@@ -54,9 +62,13 @@ export default function Chat(props) {
                     msg.map((msg, i) => {
                         return (
                             <div className="chat_msg" key={i}>
-                                <img src={msg.url} height="50px" width="50px" />
+                                <img src={msg.url} />
                                 <h5>
-                                    {`${msg.first} ${msg.last} on ${msg.ts}`}
+                                    <Link to={`/user/${msg.id}`}>
+                                        {msg.first} {msg.last}
+                                    </Link>
+
+                                    {`  on ${msg.ts}`}
                                 </h5>
                                 <p>{msg.message}</p>
                             </div>
@@ -67,6 +79,7 @@ export default function Chat(props) {
                 className="chat_input"
                 type="text"
                 onChange={(e) => chatInput(e)}
+                ref={inputRef}
             ></textarea>
             <button
                 onClick={() => {
@@ -75,6 +88,7 @@ export default function Chat(props) {
             >
                 SEND
             </button>
+            <div></div>
         </div>
     );
 }
