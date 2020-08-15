@@ -11,12 +11,16 @@ export default function Wallposts(props) {
     const [error, setError] = useState(false);
     const [wallposts, setWallposts] = useState([]);
     const [delButton, setDelButton] = useState(false);
+    const [modalVis, setModalVis] = useState(false);
 
     //const inputRef = useRef("");
 
     //content = (e) => {
     //    setWallInput(e.target.value);
     //};
+    //function toggleModal() {
+    //    setModalVis(!modalVis);
+    //}
 
     useEffect(() => {
         //component mounted: get wall posts
@@ -85,16 +89,23 @@ export default function Wallposts(props) {
             >
                 Send
             </button>
+            {modalVis && <h1>Modal sanity check</h1>}
             <div className="posts_container">
                 {wallposts &&
                     wallposts.map((post, i) => {
                         return (
                             <div className="post" key={i}>
                                 {delButton && (
+                                    //<button
+                                    //    name={post.post_id}
+                                    //    onClick={(e) => {
+                                    //        removePost(e);
+                                    //    }}
+                                    //>
                                     <button
                                         name={post.post_id}
                                         onClick={(e) => {
-                                            removePost(e);
+                                            setModalVis(!modalVis);
                                         }}
                                     >
                                         remove
