@@ -171,3 +171,11 @@ module.exports.displayPost = (post_id) => {
     console.log("params: ", params);
     return db.query(q, params);
 };
+
+module.exports.deletePost = (post_id) => {
+    let q = "DELETE FROM wall_posts WHERE id=$1";
+
+    let params = [post_id];
+    //console.log("params in deleteFriendship: ", params);
+    return db.query(q, params);
+};

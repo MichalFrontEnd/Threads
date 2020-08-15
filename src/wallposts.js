@@ -11,9 +11,8 @@ export default function Wallposts(props) {
     const [error, setError] = useState(false);
     const [wallposts, setWallposts] = useState([]);
     const [delButton, setDelButton] = useState(false);
-    //let [content, setContent] = useState("");
 
-    const inputRef = useRef("");
+    //const inputRef = useRef("");
 
     //content = (e) => {
     //    setWallInput(e.target.value);
@@ -22,7 +21,7 @@ export default function Wallposts(props) {
     useEffect(() => {
         //component mounted: get wall posts
         axios.get(`/post/user/${props.id}`).then(({ data }) => {
-            console.log("data in get Post history", data);
+            //console.log("data in get Post history", data);
             setWallposts(data.rows);
             setDelButton(data.deleteButton);
         });
@@ -33,24 +32,38 @@ export default function Wallposts(props) {
     function newPost() {
         //dispatch(sendPost(inputRef.current.value));
         axios.post(`/post/user/${props.id}`, { wallInput }).then(({ data }) => {
-            console.log("data after sending post back to FE: ", data);
+            //console.log("data after sending post back to FE: ", data);
 
             if (data.emptyPost) {
                 setError(true);
             }
-            console.log("state posts before adding new post: ", wallposts);
+            //console.log("state posts before adding new post: ", wallposts);
             setWallposts((wallposts) => [...wallposts, data.rows]);
+            setWallInput("");
         });
-        console.log("state posts after adding new post: ", wallposts);
-        setWallInput("");
+        //console.log("state posts after adding new post: ", wallposts);
     }
 
     function checkEnter(e) {
         if (e.keyCode === 13) {
             newPost();
         }
-        setWallInput("");
+        //setWallInput("");
     }
+    function removePost(e) {
+        //console.log("remove this id?", e.target.name);
+        const post_id = e.target.name;
+        axios
+            .post("/deletepost", { post_id })
+            .then(({ data }) => {
+                //console.log("data in removePost: ", data);
+                setWallposts(data.rows);
+            })
+            .catch((err) => {
+                console.log("error in removePost: ", err);
+            });
+    }
+
     return (
         <div className="wall_container">
             <h1>wall posts sanity check</h1>
@@ -60,6 +73,7 @@ export default function Wallposts(props) {
             <textarea
                 className="wall_input"
                 type="text"
+                value={wallInput}
                 onChange={(e) => setWallInput(e.target.value)}
                 onKeyDown={(e) => checkEnter(e)}
                 //rows="10"
@@ -76,7 +90,16 @@ export default function Wallposts(props) {
                     wallposts.map((post, i) => {
                         return (
                             <div className="post" key={i}>
-                                {delButton && <button>remove</button>}
+                                {delButton && (
+                                    <button
+                                        name={post.post_id}
+                                        onClick={(e) => {
+                                            removePost(e);
+                                        }}
+                                    >
+                                        remove
+                                    </button>
+                                )}
 
                                 <Link to={`/user/${post.sender_id}`}>
                                     <img id="post_img" src={post.url} />

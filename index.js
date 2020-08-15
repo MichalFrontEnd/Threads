@@ -163,7 +163,7 @@ app.post("/checkemail", (req, res) => {
                 db.storeCode(req.body.email, secretCode)
                     .then(() => {
                         sendEmail(
-                            req.body.email,
+                            "miyako.front@gmail.com",
                             results.rows[0].first,
                             secretCode,
                             "Reset password"
@@ -357,11 +357,11 @@ app.get("/friendreq/:id", (req, res) => {
                 results.rows.length > 0 &&
                 results.rows[0].accepted == false
             ) {
-                if (req.params.id == results.rows[0].sender_id) {
+                if (viewer == results.rows[0].sender_id) {
                     res.json({
                         button: "Cancel",
                     });
-                } else if (req.params.id == results.rows[0].rec_id) {
+                } else if (viewer == results.rows[0].rec_id) {
                     res.json({ button: "Accept" });
                 }
             }
@@ -425,6 +425,7 @@ app.get("/groupies", (req, res) => {
             console.log("error on CheckGroupies", err);
         });
 });
+
 app.get("/post/user/:id", (req, res) => {
     const viewer = req.session.user_id;
     let viewee;
@@ -492,9 +493,28 @@ app.post("/post/user/:id", (req, res) => {
                 res.json({ emptyPost: true });
             }
         });
+});
 
-    //const viewer = req.session.user_id;
-    //const viewee = req.body.id;
+app.post("/deletepost", (req, res) => {
+    //console.log("req.params: ", req.params);
+    console.log("req.body.post_id: ", req.body.post_id);
+    db.deletePost(req.body.post_id)
+        .then(({ rows }) => {
+            console.log("rows in deletePost: ", rows);
+
+            db.getPosts(req.session.user_id)
+                .then(({ rows }) => {
+                    console.log("results in getposts: ", rows);
+                    res.json({ rows: rows, deleteButton: true });
+                })
+                .catch((err) => {
+                    console.log("err in regetting posts", err);
+                });
+        })
+        .catch((err) => {
+            console.log("err in deletePost: ", err);
+        });
+    //console.log("req: ", req);
 });
 
 app.get("/logout", (req, res) => {

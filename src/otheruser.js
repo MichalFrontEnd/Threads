@@ -84,7 +84,11 @@ class OtherUser extends React.Component {
                     // viewer={this.state.viewer}
                 />
                 <p>{this.state.bio}</p>
-                {this.state.friends && <Wallposts id={this.state.id} />}
+                {this.state.friends ? (
+                    <Wallposts id={this.state.id} />
+                ) : (
+                    <h4>This part can only be viewed by friends!</h4>
+                )}
             </div>
         );
     }
