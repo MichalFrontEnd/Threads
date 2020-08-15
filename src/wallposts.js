@@ -32,7 +32,6 @@ export default function Wallposts(props) {
 
     function newPost() {
         //dispatch(sendPost(inputRef.current.value));
-        //setUserInput("");
         axios.post(`/post/user/${props.id}`, { wallInput }).then(({ data }) => {
             console.log("data after sending post back to FE: ", data);
 
@@ -40,9 +39,9 @@ export default function Wallposts(props) {
                 setError(true);
             }
             console.log("state posts before adding new post: ", wallposts);
-            setWallposts([...wallposts, data.rows]);
-            console.log("state posts after adding new post: ", wallposts);
-        }, []);
+            setWallposts((wallposts) => [...wallposts, data.rows]);
+        });
+        console.log("state posts after adding new post: ", wallposts);
         setContent("");
     }
 
