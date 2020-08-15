@@ -50,13 +50,13 @@ class App extends React.Component {
             {
                 url: img,
                 uploaderIsVisible: false,
-            },
-            () => {
-                console.log(
-                    "this.state in imageUpdate function",
-                    this.state.url
-                );
             }
+            //() => {
+            //    console.log(
+            //        "this.state in imageUpdate function",
+            //        this.state.url
+            //    );
+            //}
         );
     }
     bioUpdate(bio) {

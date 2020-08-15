@@ -18,7 +18,7 @@ class Uploader extends React.Component {
     photoUpload(e) {
         e.preventDefault();
         let fd = new FormData();
-        console.log("this.state.selectedPhoto: ", this.state.selectedPhoto);
+        //console.log("this.state.selectedPhoto: ", this.state.selectedPhoto);
         fd.append(
             "file",
             this.state.selectedPhoto

@@ -11,6 +11,7 @@ class OtherUser extends React.Component {
         super(props);
         this.state = {
             id: this.props.match.params.id,
+            friends: false,
             //viewer: null,
         };
     }
@@ -45,6 +46,16 @@ class OtherUser extends React.Component {
             }
         });
     }
+    updateFriendship(arg) {
+        this.setState(
+            {
+                friends: arg,
+            },
+            () => {
+                console.log("this.state.friends: ", this.state.friends);
+            }
+        );
+    }
     render() {
         let url = this.state.url || "/default.jpg";
         return (
@@ -67,10 +78,13 @@ class OtherUser extends React.Component {
                 </div>
                 <Friendbutton
                     id={this.state.id}
+                    updateFriendship={(e) => {
+                        this.updateFriendship(e);
+                    }}
                     // viewer={this.state.viewer}
                 />
                 <p>{this.state.bio}</p>
-                <Wallposts id={this.state.id} />
+                {this.state.friends && <Wallposts id={this.state.id} />}
             </div>
         );
     }

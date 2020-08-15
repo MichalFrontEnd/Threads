@@ -12,11 +12,14 @@ export default function Friendbutton(props) {
             .get(`/friendreq/${props.id}`)
             .then(
                 ({ data }) => {
-                    //console.log("data.button: ", data.button);
+                    console.log("data.button: ", data.button);
                     setButtonText(data.button);
+                    if (data.button === "Disconnect") {
+                        props.updateFriendship(true);
+                    }
                 },
                 () => {
-                    //console.log("buttonText: ", buttonText);
+                    console.log("buttonText: ", buttonText);
                 }
             )
             .catch((err) => console.log("err in friendreq mount", err));
@@ -29,10 +32,15 @@ export default function Friendbutton(props) {
         axios
             .post(`/friendreq/${buttonText}`, { id: props.id })
             .then(({ data }) => {
-                //console.log("data.button: ", data);
+                console.log("data.button: ", data);
                 setButtonText(data.button);
+                if (data.button === "Disconnect") {
+                    props.updateFriendship(true);
+                }
             });
     };
+
+    //console.log("buttonText: ", buttonText);
 
     ///will need to get passed the id of the user which we're trying to befriend/unfriend etc.
     //this will come from otheruser.abs

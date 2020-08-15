@@ -352,7 +352,7 @@ app.get("/friendreq/:id", (req, res) => {
                 //    results.rows
                 //);
                 //console.log("button should be disconnect");
-                res.json({ button: "Disconnect" });
+                res.json({ button: "Disconnect", friends: true });
             } else if (
                 results.rows.length > 0 &&
                 results.rows[0].accepted == false
@@ -435,6 +435,9 @@ app.get("/post/user/:id", (req, res) => {
     }
     console.log("viewer: ", viewer);
     console.log("viewee: ", viewee);
+    //db.checkFriendship = (viewer, viewee).then((results)=> {
+
+    //})
 
     db.getPosts(viewee).then(({ rows }) => {
         console.log("results in getposts: ", rows);
@@ -462,8 +465,8 @@ app.post("/post/user/:id", (req, res) => {
     db.addNewPost(poster, postee, req.body.wallInput)
         .then((results) => {
             //console.log(results.rows[0]);
-            const lastPostId = results.rows[0].id;
-            db.displayPost(lastPostId)
+            //const lastPostId = results.rows[0].id;
+            db.getPosts(postee)
                 .then((results) => {
                     //console.log(
                     //    "results.rows in displayPost: ",

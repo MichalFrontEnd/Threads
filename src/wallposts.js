@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import axios from "./axios";
 //import { useDispatch, useSelector } from "react-redux";
@@ -11,13 +11,13 @@ export default function Wallposts(props) {
     const [error, setError] = useState(false);
     const [wallposts, setWallposts] = useState([]);
     const [delButton, setDelButton] = useState(false);
-    let [content, setContent] = useState("");
+    //let [content, setContent] = useState("");
 
-    //const inputRef = useRef("");
+    const inputRef = useRef("");
 
-    content = (e) => {
-        setWallInput(e.target.value);
-    };
+    //content = (e) => {
+    //    setWallInput(e.target.value);
+    //};
 
     useEffect(() => {
         //component mounted: get wall posts
@@ -26,7 +26,7 @@ export default function Wallposts(props) {
             setWallposts(data.rows);
             setDelButton(data.deleteButton);
         });
-    }, []);
+    }, [wallInput]);
 
     //console.log("wallInput: ", wallInput);
 
@@ -42,14 +42,14 @@ export default function Wallposts(props) {
             setWallposts((wallposts) => [...wallposts, data.rows]);
         });
         console.log("state posts after adding new post: ", wallposts);
-        setContent("");
+        setWallInput("");
     }
 
     function checkEnter(e) {
         if (e.keyCode === 13) {
             newPost();
         }
-        setContent("");
+        setWallInput("");
     }
     return (
         <div className="wall_container">
@@ -60,7 +60,7 @@ export default function Wallposts(props) {
             <textarea
                 className="wall_input"
                 type="text"
-                onChange={content}
+                onChange={(e) => setWallInput(e.target.value)}
                 onKeyDown={(e) => checkEnter(e)}
                 //rows="10"
             ></textarea>
