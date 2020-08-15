@@ -99,7 +99,7 @@ module.exports.acceptRequest = (sender_id, rec_id) => {
         "UPDATE friendships SET accepted = true WHERE sender_id=$2 and rec_id=$1 RETURNING accepted";
 
     let params = [sender_id, rec_id];
-    console.log("params in acceptRequest: ", params);
+    //console.log("params in acceptRequest: ", params);
     return db.query(q, params);
 };
 
@@ -147,10 +147,11 @@ module.exports.displayMessage = () => {
     return db.query(q);
 };
 
-module.exports.getPosts = (posteeId) => {
+module.exports.getPosts = (vieweeId) => {
     const q =
-        "SELECT content, ts, first, last, url, users.id FROM wall_posts LEFT JOIN users ON users.id=wall_posts.sender_id WHERE users.id =$1 ORDER BY wall_posts.id DESC";
-    let params = [posteeId];
+        "SELECT wall_posts.id AS post_id, content, sender_id, rec_id, ts, first, last, url, users.id FROM wall_posts LEFT JOIN users ON users.id=wall_posts.sender_id WHERE rec_id = $1 ORDER BY wall_posts.id DESC";
+    let params = [vieweeId];
+    console.log("params in getPosts: ", params);
     return db.query(q, params);
 };
 
@@ -164,7 +165,7 @@ module.exports.addNewPost = (poster, postee, content) => {
 
 module.exports.displayPost = (post_id) => {
     const q =
-        "SELECT content, ts, first, last, url, users.id FROM wall_posts LEFT JOIN users ON users.id=wall_posts.sender_id WHERE wall_posts.id=$1";
+        "SELECT content, ts, first, last, url, users.id, sender_id FROM wall_posts LEFT JOIN users ON users.id=wall_posts.sender_id WHERE wall_posts.id=$1";
 
     let params = [post_id];
     console.log("params: ", params);

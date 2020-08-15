@@ -49,7 +49,7 @@ class Bio extends React.Component {
 
         if (!this.props.bio) {
             elem = (
-                <div>
+                <div className="bio_container">
                     <button
                         className="bio_button"
                         onClick={(e) => this.toggleBio(e)}
@@ -63,8 +63,8 @@ class Bio extends React.Component {
             mode == "view" &&
                 //if (this.mode === "view") {
                 (elem = (
-                    <div>
-                        <p>{this.props.bio}</p>
+                    <div className="bio_container">
+                        <p className="bio">{this.props.bio}</p>
                         <button
                             className="bio_button"
                             onClick={(e) => this.editBio(e)}
@@ -78,9 +78,8 @@ class Bio extends React.Component {
         {
             mode == "edit" &&
                 (elem = (
-                    <div>
+                    <div className="bio_container">
                         <textarea
-                            className="bio_container"
                             name="bio"
                             rows="5"
                             cols="30"

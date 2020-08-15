@@ -44,7 +44,7 @@ button {
     box-shadow: 2px 2px 5px #585353;
     background-color: #fff;
 }
-
+/*header*/
 .header_home,
 .logout,
 .searcher,
@@ -74,12 +74,14 @@ button {
     grid-area: 1 / 7 / span 1 / span 1;
 }
 
+/*end header*/
+
 .profile_layout {
     /*background-color: cornflowerblue;*/
     height: 90vh;
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    grid-template-rows: repeat(4, 18%);
+    grid-template-rows: repeat(6, 18%);
     grid-auto-rows: 18%;
 }
 
@@ -142,12 +144,13 @@ button {
 }
 
 .bio_container {
-    grid-area: 3 / 9 / span 2 / span 4;
+    /*grid-area: 3 / 9 / span 2 / span 4;*/
     font-size: 28px;
     display: flex;
     flex-direction: column;
     justify-content: end;
     align-items: end;
+    /*background-color: greenyellow;*/
     /*padding-left: 15%;
     padding-right: 10%;*/
 }
@@ -282,3 +285,73 @@ button {
     margin-right: 7%;
     margin-bottom: 2%;
 }
+
+/*wallposts*/
+
+.posts_container,
+.wall_container {
+    display: flex;
+    flex-direction: column;
+}
+
+.wall_container {
+    grid-row-start: 6 / span 10;
+    grid-column: 6 / span 7;
+    background-color: aqua;
+    width: 100%;
+
+}
+
+.wall_container textarea {
+    height: 500px;
+}
+
+.post {
+    display: grid;
+    border: black 1px solid;
+    width: 90%;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 30px 70px min-content 30px;
+    /*grid-auto-rows: 70px;*/
+    margin-top: 3%;
+    padding: 2%
+}
+
+.post button {
+    grid-area: 1 / 4 / span 1 / span 1;
+    place-self: end;
+}
+
+.post a {
+    display: contents;
+}
+
+#post_img {
+    grid-area: 2 / 1 / span 2 / span 1;
+    object-fit: cover;
+    object-position: top;
+    height: 120px;
+    width: 120px;
+    place-self: start center;
+}
+
+#post_name {
+    grid-area: 2 / 2 / span 1 / span 3;
+    font-size: 1.5em;
+    place-self: start;
+
+}
+
+#content {
+    grid-row-start: 3;
+    grid-column: 2 / span 3;
+    font-size: 1.5em;
+}
+
+#post_ts {
+    place-self: end;
+    grid-row-start: 4;
+    grid-column: 3 / span 2;
+    color: gray;
+    /*padding: 0;*/
+

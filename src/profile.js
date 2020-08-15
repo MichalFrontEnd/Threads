@@ -70,8 +70,8 @@ export default function Profile(props) {
                     {first} {last}
                 </h1>
                 <Bio bio={bio} bioUpdate={bioUpdate} />
-                <Wallposts />
             </div>
+            <Wallposts />
         </div>
     );
 }

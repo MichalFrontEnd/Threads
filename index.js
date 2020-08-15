@@ -8,7 +8,7 @@ const s3 = require("./s3");
 const { s3Url } = require("./config");
 const { sendEmail } = require("./ses");
 const server = require("http").Server(app);
-const io = require("socket.io")(server, { origins: "localhost:8080" });
+const io = require("socket.io")(server, { origins: "localhost:3000" });
 const cookieSessionMW = cookieSession({
     secret: "Let's get artsy!",
     maxAge: 1000 * 60 * 60 * 24 * 14,
@@ -99,8 +99,6 @@ app.post("/register", (req, res) => {
             })
             .catch((err) => {
                 console.log("err in logCreds in POST /reg: ", err);
-
-                //**********in petition I sent an error for existing email.*************
 
                 if (err.code === "23505") {
                     res.json({ emailExists: true });
@@ -427,6 +425,27 @@ app.get("/groupies", (req, res) => {
             console.log("error on CheckGroupies", err);
         });
 });
+app.get("/post/user/:id", (req, res) => {
+    const viewer = req.session.user_id;
+    let viewee;
+    if (req.params.id === "undefined") {
+        viewee = viewer;
+    } else {
+        viewee = req.params.id;
+    }
+    console.log("viewer: ", viewer);
+    console.log("viewee: ", viewee);
+
+    db.getPosts(viewee).then(({ rows }) => {
+        console.log("results in getposts: ", rows);
+        if (viewee == viewer) {
+            res.json({ rows: rows, deleteButton: true });
+            //console.log("viewee==viewer: ", viewee == viewer);
+        } else {
+            res.json({ rows: rows, deleteButton: false });
+        }
+    });
+});
 
 app.post("/post/user/:id", (req, res) => {
     //console.log("req.body: ", req.body);
@@ -438,19 +457,26 @@ app.post("/post/user/:id", (req, res) => {
     } else {
         postee = req.params.id;
     }
-    console.log("poster: ", poster);
-    console.log("postee: ", postee);
+    //console.log("poster: ", poster);
+    //console.log("postee: ", postee);
     db.addNewPost(poster, postee, req.body.wallInput)
         .then((results) => {
             //console.log(results.rows[0]);
             const lastPostId = results.rows[0].id;
             db.displayPost(lastPostId)
                 .then((results) => {
-                    console.log(
-                        "results.rows in displayPost: ",
-                        results.rows[0]
-                    );
-                    res.json(results.rows[0]);
+                    //console.log(
+                    //    "results.rows in displayPost: ",
+                    //    results.rows[0]
+                    //);
+                    if (poster == postee) {
+                        res.json({ rows: results.rows[0], deleteButton: true });
+                    } else {
+                        res.json({
+                            rows: results.rows[0],
+                            deleteButton: false,
+                        });
+                    }
                 })
                 .catch((err) => {
                     console.log("error in displayPost: ", err);
@@ -458,6 +484,10 @@ app.post("/post/user/:id", (req, res) => {
         })
         .catch((err) => {
             console.log("error in addNewPost: ", err);
+            //console.log('err.code==="23514": ', err.code === "23514");
+            if (err.code === "23514") {
+                res.json({ emptyPost: true });
+            }
         });
 
     //const viewer = req.session.user_id;
@@ -477,16 +507,13 @@ app.get("*", function (req, res) {
     }
 });
 
-server.listen(8080, function () {
+server.listen(3000, function () {
     console.log("Thready, steady, go.");
 });
 
 io.on("connection", (socket) => {
     console.log(`socket with the id ${socket.id} is now CONNECTED`);
-    //socket.on("yo", (data) => {
-    //    console.log(data);
-    //    io.emit("yoyo", { msg: "loved it!" });
-    //});
+
     const { user_id } = socket.request.session;
 
     if (!user_id) {

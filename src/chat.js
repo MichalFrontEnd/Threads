@@ -12,7 +12,7 @@ export default function Chat() {
     const inputRef = useRef("");
     const chatWindowRef = useRef();
     //let [chatInput, setChatInput] = useState("");
-    //will have to do something else when there are actual results
+
     const history = useSelector((state) => state.history);
 
     //const msg = useSelector((state) => state.msg);
@@ -63,23 +63,6 @@ export default function Chat() {
                             </div>
                         );
                     })}
-
-                {/*{msg &&
-                    msg.map((msg, i) => {
-                        return (
-                            <div className="chat_msg" key={i}>
-                                <img src={msg.url} />
-                                <h5>
-                                    <Link to={`/user/${msg.id}`}>
-                                        {msg.first} {msg.last}
-                                    </Link>
-
-                                    {`  on ${msg.ts}`}
-                                </h5>
-                                <p>{msg.message}</p>
-                            </div>
-                        );
-                    })}*/}
             </div>
             <textarea
                 className="chat_input"
