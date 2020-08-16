@@ -25,49 +25,58 @@ export default function Friends() {
 
     return (
         <React.Fragment>
-            {pending &&
-                pending.map((user, i) => {
-                    return (
-                        <div key={i}>
-                            <h3>Pending friend requests</h3>
-                            <Link
-                                to={`/user/${user.id}`}
-                                key={i}
-                                className="last_users"
-                            >
-                                <img src={user.url} />
-                                <p>{user.first + " " + user.last} </p>
-                            </Link>
-                            <button
-                                onClick={() => dispatch(acceptFriend(user.id))}
-                            >
-                                Accept
-                            </button>
-                        </div>
-                    );
-                })}
-
-            {friends &&
-                friends.map((user, i) => {
-                    return (
-                        <div key={i}>
-                            <h3>Friends</h3>
-                            <Link
-                                to={`/user/${user.id}`}
-                                key={i}
-                                className="last_users"
-                            >
-                                <img src={user.url} />
-                                <p>{user.first + " " + user.last} </p>
-                            </Link>
-                            <button
-                                onClick={() => dispatch(deleteFriend(user.id))}
-                            >
-                                Disconnect
-                            </button>
-                        </div>
-                    );
-                })}
+            {pending && <h3 className="sec_header">Pending friend requests</h3>}
+            <div className="friends_container">
+                {pending &&
+                    pending.map((user, i) => {
+                        return (
+                            <div key={i} className="person">
+                                <Link to={`/user/${user.id}`}>
+                                    <img
+                                        src={
+                                            user.url ||
+                                            "/images/defaultdesat.jpg"
+                                        }
+                                    />
+                                    <p>{user.first + " " + user.last} </p>
+                                </Link>
+                                <button
+                                    onClick={() =>
+                                        dispatch(acceptFriend(user.id))
+                                    }
+                                >
+                                    Accept
+                                </button>
+                            </div>
+                        );
+                    })}
+            </div>
+            {friends && <h3 className="sec_header">Friends</h3>}
+            <div className="friends_container">
+                {friends &&
+                    friends.map((user, i) => {
+                        return (
+                            <div key={i} className="person">
+                                <Link to={`/user/${user.id}`}>
+                                    <img
+                                        src={
+                                            user.url ||
+                                            "/images/defaultdesat.jpg"
+                                        }
+                                    />
+                                    <p>{user.first + " " + user.last} </p>
+                                </Link>
+                                <button
+                                    onClick={() =>
+                                        dispatch(deleteFriend(user.id))
+                                    }
+                                >
+                                    Disconnect
+                                </button>
+                            </div>
+                        );
+                    })}
+            </div>
         </React.Fragment>
     );
 }

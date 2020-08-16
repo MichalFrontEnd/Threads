@@ -35,7 +35,7 @@ class OtherUser extends React.Component {
                     {
                         first: data.data.first,
                         last: data.data.last,
-                        url: data.data.url,
+                        url: data.data.url || "/images/defaultdesat.jpg",
                         bio: data.data.bio,
                         coverphoto: data.data.coverphoto,
                     }

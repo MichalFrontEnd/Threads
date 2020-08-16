@@ -31,9 +31,16 @@ export default class Login extends React.Component {
                 }
             });
     }
+
+    checkEnter(e) {
+        if (e.keyCode === 13) {
+            this.submit();
+        }
+    }
+
     render() {
         return (
-            <div>
+            <div className="reg_form">
                 {this.state.error && (
                     <div className="error">
                         Invalid email or password. Please try again.
@@ -53,12 +60,13 @@ export default class Login extends React.Component {
                         type="password"
                         onInput={(e) => this.inputChange(e)}
                         name="pwd"
+                        onKeyDown={(e) => this.checkEnter(e)}
                     />
                 </label>
                 <button onClick={(e) => this.submit()}>Submit</button>
                 <p>
                     Not yet a member? Click
-                    <Link to="/reg"> here </Link>to register!
+                    <Link to="/"> here </Link>to register!
                 </p>
                 <p>
                     Forgot your password? Click

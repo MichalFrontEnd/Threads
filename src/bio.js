@@ -9,6 +9,14 @@ class Bio extends React.Component {
             value: this.props.bio,
         };
     }
+
+    componentDidMount() {
+        if (!this.props.bio) {
+            this.setState({
+                mode: "add",
+            });
+        }
+    }
     bioChange(e) {
         this.setState({
             value: e.target.value,
@@ -23,8 +31,7 @@ class Bio extends React.Component {
             () => console.log("moving into edit mode!")
         );
     }
-    sendBio(e) {
-        e.preventDefault();
+    sendBio() {
         let fd = new FormData();
         //console.log("this.state.newBio ", this.state.newBio);
         fd.append("bio", this.state.value);
@@ -43,22 +50,32 @@ class Bio extends React.Component {
         });
     }
 
+    checkEnter(e) {
+        if (e.keyCode === 13) {
+            this.sendBio();
+        }
+        //setWallInput("");
+    }
+
     render() {
         let elem;
         const { mode } = this.state;
 
-        if (!this.props.bio) {
-            elem = (
-                <div className="bio_container">
-                    <button
-                        className="bio_button"
-                        onClick={(e) => this.toggleBio(e)}
-                    >
-                        Add bio!
-                    </button>
-                </div>
-            );
+        //if (!this.props.bio) {
+        {
+            mode == "add" &&
+                (elem = (
+                    <div className="bio_container">
+                        <button
+                            className="bio_button"
+                            onClick={(e) => this.toggleBio(e)}
+                        >
+                            Add bio!
+                        </button>
+                    </div>
+                ));
         }
+        //}
         {
             mode == "view" &&
                 //if (this.mode === "view") {
@@ -85,6 +102,7 @@ class Bio extends React.Component {
                             cols="30"
                             value={this.state.value}
                             onChange={(e) => this.bioChange(e)}
+                            onKeyDown={(e) => this.checkEnter(e)}
                         ></textarea>
                         <button
                             className="bio_button"

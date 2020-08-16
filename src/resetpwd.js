@@ -73,7 +73,7 @@ export default class ResetPassword extends React.Component {
         const { step } = this.state;
         //can also do a regular "if" statement, or write a function
         return (
-            <div>
+            <div className="reg_form">
                 {step == 1 && (
                     <div>
                         {this.state.error && (
@@ -93,6 +93,10 @@ export default class ResetPassword extends React.Component {
                         <button onClick={(e) => this.submitEmail()}>
                             Submit
                         </button>
+                        <p>
+                            Or go
+                            <Link to="/"> back </Link>!
+                        </p>
                     </div>
                 )}
                 {step == 2 && (

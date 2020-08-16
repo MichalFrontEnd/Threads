@@ -29,7 +29,7 @@ export default function Search(props) {
     };
 
     return (
-        <div>
+        <div className="tu_container">
             <h2>Here are our latest joiners!</h2>
             <div className="threeUsers">
                 {lastUsers &&
@@ -40,8 +40,10 @@ export default function Search(props) {
                                 key={i}
                                 className="last_users"
                             >
-                                <img src={user.url} />
-                                <p>{user.first + " " + user.last} </p>
+                                <img
+                                    src={user.url || "/images/defaultdesat.jpg"}
+                                />
+                                <h3>{user.first + " " + user.last} </h3>
                             </Link>
                         );
                     })}
@@ -56,26 +58,28 @@ export default function Search(props) {
                     onChange={userSearch}
                 />
                 <div></div>
-                <div className="res_container">
-                    {searchRes &&
-                        searchRes.map((person, i) => {
-                            return (
-                                <div key={i}>
-                                    <Link to={`/user/${person.id}`} key={i}>
-                                        <div className="person">
-                                            <img src={person.url} />
-                                            <p>
-                                                {`${person.first} ${person.last}`}
-                                            </p>
-                                        </div>
-                                    </Link>
-                                </div>
-                            );
-                        })}
-                </div>
                 {error && (
                     <div className="error">
                         No results for this search, sorry :/.
+                    </div>
+                )}
+                {userInput && (
+                    <div className="res_container">
+                        {searchRes &&
+                            searchRes.map((person, i) => {
+                                return (
+                                    <div key={i}>
+                                        <Link to={`/user/${person.id}`} key={i}>
+                                            <div className="person">
+                                                <img src={person.url} />
+                                                <h3>
+                                                    {`${person.first} ${person.last}`}
+                                                </h3>
+                                            </div>
+                                        </Link>
+                                    </div>
+                                );
+                            })}
                     </div>
                 )}
 

@@ -52,8 +52,8 @@ export default function Wallposts(props) {
         if (e.keyCode === 13) {
             newPost();
         }
-        //setWallInput("");
     }
+
     function removePost(e) {
         //console.log("remove this id?", e.target.name);
         const post_id = e.target.name;
@@ -89,19 +89,13 @@ export default function Wallposts(props) {
             >
                 Send
             </button>
-            {modalVis && <h1>Modal sanity check</h1>}
+
             <div className="posts_container">
                 {wallposts &&
                     wallposts.map((post, i) => {
                         return (
                             <div className="post" key={i}>
                                 {delButton && (
-                                    //<button
-                                    //    name={post.post_id}
-                                    //    onClick={(e) => {
-                                    //        removePost(e);
-                                    //    }}
-                                    //>
                                     <button
                                         name={post.post_id}
                                         onClick={(e) => {
@@ -120,6 +114,36 @@ export default function Wallposts(props) {
                                 </Link>
                                 <p id="content">{post.content}</p>
                                 <p id="post_ts">{post.ts}</p>
+                                {modalVis && (
+                                    <div
+                                        className="overlay"
+                                        onClick={(e) => {
+                                            setModalVis(!modalVis);
+                                        }}
+                                    >
+                                        <div className="post_del">
+                                            <h4>
+                                                Are you sure you want to delete
+                                                this post?
+                                            </h4>
+                                            <button
+                                                onClick={(e) => {
+                                                    setModalVis(!modalVis);
+                                                }}
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                name={post.post_id}
+                                                onClick={(e) => {
+                                                    removePost(e);
+                                                }}
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         );
                     })}

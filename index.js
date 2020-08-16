@@ -434,14 +434,14 @@ app.get("/post/user/:id", (req, res) => {
     } else {
         viewee = req.params.id;
     }
-    console.log("viewer: ", viewer);
-    console.log("viewee: ", viewee);
+    //console.log("viewer: ", viewer);
+    //console.log("viewee: ", viewee);
     //db.checkFriendship = (viewer, viewee).then((results)=> {
 
     //})
 
     db.getPosts(viewee).then(({ rows }) => {
-        console.log("results in getposts: ", rows);
+        //console.log("results in getposts: ", rows);
         if (viewee == viewer) {
             res.json({ rows: rows, deleteButton: true });
             //console.log("viewee==viewer: ", viewee == viewer);
@@ -497,14 +497,14 @@ app.post("/post/user/:id", (req, res) => {
 
 app.post("/deletepost", (req, res) => {
     //console.log("req.params: ", req.params);
-    console.log("req.body.post_id: ", req.body.post_id);
+    //console.log("req.body.post_id: ", req.body.post_id);
     db.deletePost(req.body.post_id)
         .then(({ rows }) => {
             console.log("rows in deletePost: ", rows);
 
             db.getPosts(req.session.user_id)
                 .then(({ rows }) => {
-                    console.log("results in getposts: ", rows);
+                    //console.log("results in getposts: ", rows);
                     res.json({ rows: rows, deleteButton: true });
                 })
                 .catch((err) => {

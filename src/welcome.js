@@ -9,7 +9,7 @@ export default function Welcome() {
     return (
         <HashRouter>
             <div>
-                <h1> Welcome </h1> <img src="Bows.png" />
+                <img className="large_logo" src="/images/3pur.png" />
                 <Route exact path="/" component={Registration} />
                 <Route path="/login" component={Login} />
                 <Route path="/resetpwd" component={ResetPassword} />
