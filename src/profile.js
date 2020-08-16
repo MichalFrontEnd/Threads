@@ -17,8 +17,15 @@ export default function Profile(props) {
         bioUpdate,
     } = props;
     const [isShown, setIsShown] = useState(false);
+    const [modalShown, setModalShown] = useState(false);
     //const [hasFrame, setHasFrame] = useState(false);
     //const toggleFrame = () => setHasFrame(!hasFrame);
+
+    function toggleModal() {
+        //console.log("modal should show");
+
+        setModalShown(!modalShown);
+    }
 
     return (
         <div
@@ -40,16 +47,34 @@ export default function Profile(props) {
                     setIsShown(false);
                     //toggleFrame;
                 }}
+                onClick={() => toggleModal()}
             >
                 <Profilepic
                     first={first}
                     last={last}
                     url={url}
-                    toggleUpload={toggleUpload}
+                    //toggleUpload={toggleUpload}
                     pPicClass="profile_pic"
                 />
             </div>
-
+            {modalShown && (
+                <div
+                    className="overlay"
+                    onClick={(e) => {
+                        setModalShown(!modalShown);
+                    }}
+                >
+                    <div className="large_pp">
+                        <img
+                            onClick={(e) => {
+                                setModalShown(!modalShown);
+                            }}
+                            src={url}
+                            alt={`${first}  ${last}`}
+                        ></img>
+                    </div>
+                </div>
+            )}
             {isShown && (
                 <button
                     className="photo_add"

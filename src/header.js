@@ -25,7 +25,7 @@ export default function Header(props) {
                     first={props.first}
                     last={props.last}
                     url={props.url}
-                    toggleUpload={props.doNothing}
+                    //toggleUpload={props.doNothing}
                     pPicClass="header_pic"
                 />
             </Link>

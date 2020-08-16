@@ -12,8 +12,10 @@ class OtherUser extends React.Component {
         this.state = {
             id: this.props.match.params.id,
             friends: false,
+            modalIsVisible: false,
             //viewer: null,
         };
+        this.toggleModal = this.toggleModal.bind(this);
     }
     componentDidMount() {
         //const id = this.props.match.params.id;
@@ -46,6 +48,12 @@ class OtherUser extends React.Component {
             }
         });
     }
+    toggleModal() {
+        this.setState({
+            modalIsVisible: !this.state.modalIsVisible,
+        });
+    }
+
     updateFriendship(arg) {
         this.setState(
             {
@@ -56,10 +64,29 @@ class OtherUser extends React.Component {
             }
         );
     }
+
     render() {
         let url = this.state.url || "/default.jpg";
         return (
             <div className="profile_layout">
+                {this.state.modalIsVisible && (
+                    <div
+                        className="overlay"
+                        onClick={() => {
+                            this.toggleModal();
+                        }}
+                    >
+                        <div className="large_pp">
+                            <img
+                                onClick={() => {
+                                    this.toggleModal();
+                                }}
+                                src={url}
+                                alt={(this.state.first, this.state.last)}
+                            ></img>
+                        </div>
+                    </div>
+                )}
                 {this.state.error && (
                     <h2 className="error">Not a valid user.</h2>
                 )}
@@ -72,6 +99,9 @@ class OtherUser extends React.Component {
                         className="profile_pic"
                         src={url}
                         alt={(this.state.first, this.state.last)}
+                        onClick={(e) => {
+                            this.toggleModal(e);
+                        }}
                     />
                 </div>
                 <Friendbutton
