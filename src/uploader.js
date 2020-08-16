@@ -49,9 +49,11 @@ class Uploader extends React.Component {
                         onChange={(e) => this.inputChange(e)}
                         accept="image/*"
                     />
+
                     <button onClick={(e) => this.photoUpload(e)}>
                         Upload photo
                     </button>
+                    <span>*Must be under 2MB</span>
                 </div>
             </Fragment>
         );

@@ -75,9 +75,14 @@ button {
     margin-left: 1em;
 }
 
+.reg_form a {
+    text-decoration: underline;
+}
+
 label,
 input {
     margin-right:0.5em;
+    font-size: 1em;
 }
 
 .header_logo {
@@ -191,10 +196,16 @@ input {
     border-right: 1px solid #585353;
     border-bottom: 1px solid #585353;
     box-shadow: 5px 10px 10px #585353;
-    height: 20%;
-    display: inline-flex;
-    justify-content: space-between;
+    height: 30%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: end;
     padding: 5%;
+}
+
+.uploader span {
+    align-self: flex-end;
+    margin-top: 2%;
 }
 
 .bio_container {
@@ -204,6 +215,7 @@ input {
     justify-content: end;
     align-items: end;
 
+
 }
 
 .bio_button {
@@ -212,7 +224,8 @@ input {
 }
 
 .user_info {
-    grid-area: 4 / 6 / span 2 / span 3;
+    grid-area: 4 / 6 / span 2 / span 4;
+    
 }
 
 .username {
@@ -445,7 +458,7 @@ input {
 }
 
 .wall_container {
-    grid-row-start: 6;
+    grid-row-start: 7;
     grid-column: 2 / span 11;
     width: 100%; 
     height: min-content;
@@ -456,12 +469,12 @@ input {
 }
 
 .private {
-    grid-row: 6 / span 2;
+    grid-row: 7 / span 2;
     grid-column: 6 / span 6;
     border-radius: 5%;
     /*border: lightslategray 4px dashed;*/
     font-size: 4em;
-    /*height: min-content;*/
+    height: min-content;
     padding: 1em;
     background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23778899FF' stroke-width='6' stroke-dasharray='15%2c 15%2c 1' stroke-dashoffset='0' stroke-linecap='butt'/%3e%3c/svg%3e");
     }

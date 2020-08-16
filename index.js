@@ -27,13 +27,6 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(express.json());
 
-//app.use(require("csurf")());
-
-//app.use((req, res, next) => {
-//    res.cookie("myToken", req.csrfToken());
-//    next();
-//});
-
 ///////FIle UPLOAD BOILERPLATE DON'T TOUCH!!//////
 const multer = require("multer");
 const uidSafe = require("uid-safe");
@@ -75,6 +68,13 @@ if (process.env.NODE_ENV != "production") {
 //    console.log("req.url test: ", req.url);
 //    next();
 //});
+
+app.use(require("csurf")());
+
+app.use((req, res, next) => {
+    res.cookie("myToken", req.csrfToken());
+    next();
+});
 
 app.get("/welcome", (req, res) => {
     if (req.session.user_id) {
