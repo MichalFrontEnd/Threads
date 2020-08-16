@@ -70,26 +70,27 @@ export default function Wallposts(props) {
 
     return (
         <div className="wall_container">
-            <h1>wall posts sanity check</h1>
-            {error && (
-                <div className="error">Wall posts must have content!</div>
-            )}
-            <textarea
-                className="wall_input"
-                type="text"
-                value={wallInput}
-                onChange={(e) => setWallInput(e.target.value)}
-                onKeyDown={(e) => checkEnter(e)}
-                //rows="10"
-            ></textarea>
-            <button
-                onClick={() => {
-                    newPost();
-                }}
-            >
-                Send
-            </button>
-
+            <div className="post_input">
+                <h1>What&apos;s on your mind?</h1>
+                {error && (
+                    <div className="error">Wall posts must have content!</div>
+                )}
+                <textarea
+                    className="wall_input"
+                    type="text"
+                    value={wallInput}
+                    onChange={(e) => setWallInput(e.target.value)}
+                    onKeyDown={(e) => checkEnter(e)}
+                    //rows="10"
+                ></textarea>
+                <button
+                    onClick={() => {
+                        newPost();
+                    }}
+                >
+                    Post
+                </button>
+            </div>
             <div className="posts_container">
                 {wallposts &&
                     wallposts.map((post, i) => {
@@ -108,9 +109,9 @@ export default function Wallposts(props) {
 
                                 <Link to={`/user/${post.sender_id}`}>
                                     <img id="post_img" src={post.url} />
-                                    <h5 id="post_name">
+                                    <h4 id="post_name">
                                         {post.first + " " + post.last}{" "}
-                                    </h5>
+                                    </h4>
                                 </Link>
                                 <p id="content">{post.content}</p>
                                 <p id="post_ts">{post.ts}</p>
@@ -122,10 +123,10 @@ export default function Wallposts(props) {
                                         }}
                                     >
                                         <div className="post_del">
-                                            <h4>
+                                            <h5>
                                                 Are you sure you want to delete
                                                 this post?
-                                            </h4>
+                                            </h5>
                                             <button
                                                 onClick={(e) => {
                                                     setModalVis(!modalVis);

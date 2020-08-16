@@ -66,28 +66,36 @@ class OtherUser extends React.Component {
                 <div className="cover_container">
                     <Coverphoto />
                 </div>
-                <h1 className="username">
-                    {this.state.first} {this.state.last}
-                </h1>
-                <div className="pro_pic_container">
+
+                <div className="oupro_pic_container">
                     <img
-                        className="user_image"
+                        className="profile_pic"
                         src={url}
                         alt={(this.state.first, this.state.last)}
                     />
                 </div>
                 <Friendbutton
                     id={this.state.id}
+                    fbClass="ouser_fb"
                     updateFriendship={(e) => {
                         this.updateFriendship(e);
                     }}
                     // viewer={this.state.viewer}
                 />
-                <p>{this.state.bio}</p>
+                <div className="user_info">
+                    <h1 className="username">
+                        {this.state.first} {this.state.last}
+                    </h1>
+                    <div className="bio_container">
+                        <p className="bio">{this.state.bio}</p>
+                    </div>
+                </div>
                 {this.state.friends ? (
                     <Wallposts id={this.state.id} />
                 ) : (
-                    <h4>This part can only be viewed by friends!</h4>
+                    <h2 className="private">
+                        Wall posts can only be viewed by friends!
+                    </h2>
                 )}
             </div>
         );

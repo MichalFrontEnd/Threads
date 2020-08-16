@@ -65,14 +65,12 @@ class Bio extends React.Component {
         {
             mode == "add" &&
                 (elem = (
-                    <div className="bio_container">
-                        <button
-                            className="bio_button"
-                            onClick={(e) => this.toggleBio(e)}
-                        >
-                            Add bio!
-                        </button>
-                    </div>
+                    <button
+                        className="bio_button"
+                        onClick={(e) => this.toggleBio(e)}
+                    >
+                        Add bio!
+                    </button>
                 ));
         }
         //}

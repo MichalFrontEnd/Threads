@@ -43,7 +43,7 @@ export default function Search(props) {
                                 <img
                                     src={user.url || "/images/defaultdesat.jpg"}
                                 />
-                                <h3>{user.first + " " + user.last} </h3>
+                                <h4>{user.first + " " + user.last} </h4>
                             </Link>
                         );
                     })}
@@ -72,9 +72,9 @@ export default function Search(props) {
                                         <Link to={`/user/${person.id}`} key={i}>
                                             <div className="person">
                                                 <img src={person.url} />
-                                                <h3>
+                                                <h4>
                                                     {`${person.first} ${person.last}`}
-                                                </h3>
+                                                </h4>
                                             </div>
                                         </Link>
                                     </div>
