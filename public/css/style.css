@@ -81,7 +81,7 @@ input {
 }
 
 .header_logo {
-    height: 110px;
+    height: 130px;
     margin-left: 2%;
     grid-area: 1 / 1 / span 2 / span 1;
 }
@@ -180,8 +180,8 @@ input {
 }
 
 .pro_pic_container:hover {
-    border: 10px solid #eee4fa;
-    background-color: #902e9a;
+    border: 10px solid #902e9a;
+    background-color: #fff;
 }
 
 .uploader {
@@ -203,6 +203,7 @@ input {
     flex-direction: column;
     justify-content: end;
     align-items: end;
+
 }
 
 .bio_button {
@@ -216,6 +217,7 @@ input {
 
 .username {
     font-size: 4em;
+    color: #902e9a;
 }
 
 .ouser_fb {
@@ -404,32 +406,35 @@ input {
     right: 0;
     backdrop-filter: blur(4px);
     justify-content: center;
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 .large_pp{
     height: 80%;
     padding: 0.5%;
+    width: 55%;
+    text-align: center;
 }
 
 .large_pp img{
     height: 100%;
-    border-radius: 3%;
+
 
 }
 
 .post_del, .large_pp{
     z-index: 5;
     align-self: center;
-    background-color: #000;
+    background-color: whitesmoke;
     border-right: 1px solid #585353;
     border-bottom: 1px solid #585353;
     box-shadow: 5px 10px 10px #585353;
-    border-radius: 4%;
+
 
 }
 .post_del{
     padding: 1em 5em 2em;
-    background-color: #fff;
+    border-radius: 4%;
 
 
 }
@@ -518,6 +523,7 @@ input {
     grid-area: 2 / 2 / span 1 / span 3;
     font-size: 1.5em;
     place-self: start;
+    color: #902e9a;
 
 }
 
