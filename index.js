@@ -11,6 +11,7 @@ const server = require("http").Server(app);
 const io = require("socket.io")(server, {
     origins: "localhost:3000 https://threadssn.herokuapp.com/:*",
 });
+
 const cookieSessionMW = cookieSession({
     secret: "Let's get artsy!",
     maxAge: 1000 * 60 * 60 * 24 * 14,
