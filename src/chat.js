@@ -51,7 +51,12 @@ export default function Chat() {
                     history.map((history, i) => {
                         return (
                             <div className="chat_msg" key={i}>
-                                <img src={history.url} />
+                                <img
+                                    src={
+                                        history.url ||
+                                        "/images/defaultdesat.jpg"
+                                    }
+                                />
                                 <h4>
                                     <Link to={`/user/${history.id}`}>
                                         {history.first} {history.last}

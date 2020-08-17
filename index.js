@@ -8,7 +8,9 @@ const s3 = require("./s3");
 const { s3Url } = require("./config");
 const { sendEmail } = require("./ses");
 const server = require("http").Server(app);
-const io = require("socket.io")(server, { origins: "localhost:3000" });
+const io = require("socket.io")(server, {
+    origins: "localhost:3000 https://threadssn.herokuapp.com/:*",
+});
 const cookieSessionMW = cookieSession({
     secret: "Let's get artsy!",
     maxAge: 1000 * 60 * 60 * 24 * 14,
@@ -69,12 +71,12 @@ if (process.env.NODE_ENV != "production") {
 //    next();
 //});
 
-app.use(require("csurf")());
+//app.use(require("csurf")());
 
-app.use((req, res, next) => {
-    res.cookie("myToken", req.csrfToken());
-    next();
-});
+//app.use((req, res, next) => {
+//    res.cookie("myToken", req.csrfToken());
+//    next();
+//});
 
 app.get("/welcome", (req, res) => {
     if (req.session.user_id) {
@@ -530,7 +532,7 @@ app.get("*", function (req, res) {
     }
 });
 
-server.listen(3000, function () {
+server.listen(process.env.PORT || 3000, function () {
     console.log("Thready, steady, go.");
 });
 

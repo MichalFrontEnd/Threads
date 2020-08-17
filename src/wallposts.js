@@ -108,7 +108,13 @@ export default function Wallposts(props) {
                                 )}
 
                                 <Link to={`/user/${post.sender_id}`}>
-                                    <img id="post_img" src={post.url} />
+                                    <img
+                                        id="post_img"
+                                        src={
+                                            post.url ||
+                                            "/images/defaultdesat.jpg"
+                                        }
+                                    />
                                     <h4 id="post_name">
                                         {post.first + " " + post.last}{" "}
                                     </h4>

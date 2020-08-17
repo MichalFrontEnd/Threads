@@ -22,7 +22,7 @@ h1, h2, h3 {
     font-size: 1.3em;
 }
 
-p, h5, label{
+p, h5, label, .error{
     font-family: 'Montserrat', sans-serif;
     font-size: 1.2em;
 
@@ -36,6 +36,13 @@ textarea, input{
 a {
     text-decoration: unset;
     color: black;
+}
+
+.error{
+    color:#902e9a;
+    font-size: 1.4em;
+    margin-bottom: 2em;
+
 }
 
 header {
