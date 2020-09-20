@@ -533,7 +533,7 @@ app.get("*", function (req, res) {
     }
 });
 
-server.listen(process.env.PORT || 3000, function () {
+server.listen(process.env.PORT || 8080, function () {
     console.log("Thready, steady, go.");
 });
 
