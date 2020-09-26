@@ -11,6 +11,7 @@ A 2-page app that includes: login/registration, authentication, editable user pr
 Node (Express), PostgreSQL, React, React Router, Redux, AWS (S3, SES), Socket.io.
 
 ### Feautures
+* Logo design by Sharo003 @fiverr.com
 * Authentcation and password reset via email.
 * Photo upload.
 * Random cover photos with creative themes.
