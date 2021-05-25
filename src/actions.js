@@ -11,9 +11,7 @@ export async function getGroupies() {
 }
 
 export async function acceptFriend(id) {
-    //console.log("id in acceptFriend: ", id);
     const { data } = await axios.post("/friendreq/Accept", { id });
-    //console.log("data.data.id: ", data.id);
     return {
         type: "ACCEPT_FRIEND",
         id: data.id,
@@ -21,7 +19,6 @@ export async function acceptFriend(id) {
 }
 
 export async function deleteFriend(id) {
-    //console.log("id in deleteFriend: ", id);
     const { data } = await axios.post("/friendreq/Disconnect", { id });
     return {
         type: "DELETE_FRIEND",
@@ -37,7 +34,6 @@ export function chatHistory(history) {
 }
 
 export function sendMessage(chatInput) {
-    //console.log("chatInput: ", chatInput);
     socket.emit("chatInput", chatInput);
     return {
         type: "SEND_MESSAGE",
@@ -46,18 +42,9 @@ export function sendMessage(chatInput) {
 }
 
 export function displayMsg(msg) {
-    //console.log("msg: ", msg);
     return {
         type: "DISPLAY_MSG",
         msg,
     };
 }
 
-//export function sendPost(post) {
-//    console.log("post: ", post);
-//    axios.post("/user/post", { post });
-//    return {
-//        type: "SEND_POST",
-//        post,
-//    };
-//}
