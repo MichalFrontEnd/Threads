@@ -66,11 +66,6 @@ if (process.env.NODE_ENV != "production") {
     app.use("/bundle.js", (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
 
-//app.use((req, res, next) => {
-//    console.log("is this working?");
-//    console.log("req.url test: ", req.url);
-//    next();
-//});
 
 //app.use(require("csurf")());
 
@@ -87,14 +82,12 @@ app.get("/welcome", (req, res) => {
     }
 });
 
-//petition reg
+//reg
 app.post("/register", (req, res) => {
-    //console.log("req.body: ", req.body);
     const { first, last, email } = req.body;
     hash(req.body.pwd).then((hashedPwd) => {
         db.logCreds(first, last, email, hashedPwd)
             .then((results) => {
-                //console.log("results.rows[0]: ", results.rows[0]);
                 ////storing the user_id and name in the cookie:
                 req.session.user_id = results.rows[0].id;
                 req.session.first = req.body.first;
@@ -114,12 +107,9 @@ app.post("/register", (req, res) => {
 
 app.post("/login", (req, res) => {
     //getting the hashed pwd from the db using the email.
-    //console.log("req.body in login: ", req.body);
     if (req.body.email) {
-        //console.log("req.body.email: ", req.body.email);
         db.getPwd(req.body.email)
             .then((results) => {
-                //console.log("results in getPwd: ", results);
                 if (!results.rows[0].pwd) {
                     res.json({ loginSuccess: false });
                 } else {
@@ -127,8 +117,6 @@ app.post("/login", (req, res) => {
                     compare(req.body.pwd, results.rows[0].pwd)
                         .then((matchValue) => {
                             if (matchValue === true) {
-                                //req.session.email = req.body.email;
-                                //req.session.first = results.rows[0].first;
                                 req.session.user_id = results.rows[0].id;
                                 res.json({
                                     loginSuccess: true,
@@ -157,8 +145,6 @@ app.post("/checkemail", (req, res) => {
     if (req.body.email) {
         db.getPwd(req.body.email)
             .then((results) => {
-                //console.log("results in checkemail: ", results.rows[0]);
-
                 const cryptoRandomString = require("crypto-random-string");
                 const secretCode = cryptoRandomString({
                     length: 6,
@@ -166,14 +152,14 @@ app.post("/checkemail", (req, res) => {
                 db.storeCode(req.body.email, secretCode)
                     .then(() => {
                         sendEmail(
-                            "miyako.front@gmail.com",
+                            //"miyako.front@gmail.com",
+                            req.body.email,
                             results.rows[0].first,
                             secretCode,
                             "Reset password"
                         );
                         res.json({
                             checkEmailSuccess: true,
-                            //data: results.rows[0],
                         });
                     })
                     .catch((err) => {
@@ -193,10 +179,8 @@ app.post("/checkcode", (req, res) => {
         db.checkCode(req.body.email)
             .then((results) => {
                 if (req.body.code === results.rows[0].code) {
-                    //console.log("it's a match!");
                     res.json({ checkCodeSuccess: true });
                 } else {
-                    //console.log("it's not a match :/");
                     res.json({ checkCodeSuccess: false });
                 }
             })
@@ -210,12 +194,10 @@ app.post("/checkcode", (req, res) => {
 });
 
 app.post("/setnewpwd", (req, res) => {
-    //console.log("req.body in setnewpwd: ", req.body);
     if (req.body.pwd) {
         hash(req.body.pwd).then((hashedPwd) => {
             db.updatePassword(req.body.email, hashedPwd)
                 .then(() => {
-                    //console.log("Password changed successfuly");
                     res.json({ updatePwdSuccess: true });
                 })
                 .catch((err) => {
@@ -238,14 +220,11 @@ app.get("/user", (req, res) => {
 });
 
 app.post("/photoupld", uploader.single("file"), s3.upload, (req, res) => {
-    //console.log("is this working?");
-    //console.log("req.file in photoupld: ", req.file);
     const { filename } = req.file;
     const url = s3Url + filename;
 
     db.newProfileImage(req.session.user_id, url)
         .then((results) => {
-            //console.log("results in photoupld: ", results.rows[0].url);
             res.json({ data: results.rows[0].url });
         })
         .catch((err) => {
@@ -254,11 +233,8 @@ app.post("/photoupld", uploader.single("file"), s3.upload, (req, res) => {
 });
 
 app.post("/updatebio", (req, res) => {
-    //console.log("req.body in updatebio: ", req.body);
-
     db.bioUpdate(req.session.user_id, req.body.bio)
         .then((results) => {
-            //console.log("results.rows[0] in updatebio: ", results.rows[0]);
             res.json({ data: results.rows[0].bio });
         })
         .catch((err) => {
@@ -270,10 +246,8 @@ app.get("/switch/user/:id", (req, res) => {
     if (req.params.id == req.session.user_id) {
         return res.json({ sameUser: true });
     }
-    //console.log("req.params: ", req.params.id);
     db.getUserInfo(req.params.id)
         .then((results) => {
-            //console.log("results in GET ouser", results.rows[0]);
             if (!results.rows[0]) {
                 res.json({ getInfoSuccess: false });
             } else {
@@ -290,7 +264,6 @@ app.get("/switch/user/:id", (req, res) => {
 app.get("/showusers", (req, res) => {
     db.lastUsers()
         .then((results) => {
-            //console.log("results in lastUsers", results.rows);
             res.json({ data: results.rows });
         })
         .catch((err) => {
@@ -299,11 +272,9 @@ app.get("/showusers", (req, res) => {
 });
 
 app.get("/search:search", (req, res) => {
-    //console.log("req.params in search: ", req.params.search);
     if (req.params.search) {
         db.searchUser(req.params.search)
             .then((results) => {
-                //console.log("results in search", results.rows);
                 if (results.rows.length == 0) {
                     res.json({ searchSuccess: false });
                 } else {
@@ -311,7 +282,6 @@ app.get("/search:search", (req, res) => {
                     results.rows.sort(function (a, b) {
                         return a.last - b.last, a.first - b.first;
                     });
-                    //console.log("results after sort", results.rows);
                     res.json({ data: results.rows, searchSuccess: true });
                 }
             })
@@ -320,41 +290,22 @@ app.get("/search:search", (req, res) => {
                 res.json({ searchSuccess: false });
             });
     } else {
-        //console.log("no input yet");
         res.json({ searchSuccess: true });
     }
 });
 
 app.get("/friendreq/:id", (req, res) => {
-    //console.log("req.params.id in friendreq: ", req.params.id);
-    //console.log("req.session.user_id in friendreq: ", req.session.user_id);
     const viewer = req.session.user_id;
     const viewee = req.params.id;
-    //console.log("page mounted before db q");
     ///if the results are empty it means there is no relationship. a relationship makes a row.
     db.checkFriendship(viewer, viewee)
         .then((results) => {
-            //console.log("results in checkFriendship", results.rows);
-
-            //console.log(
-            //    "results.rows[0].length > 0 : ",
-            //    results.rows.length > 0
-            //);
-            //console.log(
-            //    "results.rows[0].accepted == false: ",
-            //    results.rows[0].accepted == false
-            //);
             if (results.rows.length === 0) {
                 res.json({ button: "Connect!" });
             } else if (
                 results.rows.length > 0 &&
                 results.rows[0].accepted == true
             ) {
-                //console.log(
-                //    "results.rows in button-to-disconnect: ",
-                //    results.rows
-                //);
-                //console.log("button should be disconnect");
                 res.json({ button: "Disconnect", friends: true });
             } else if (
                 results.rows.length > 0 &&
@@ -375,9 +326,6 @@ app.get("/friendreq/:id", (req, res) => {
 });
 
 app.post("/friendreq/:status", (req, res) => {
-    //console.log("req.params in friendreq/status: ", req.params);
-
-    //console.log("req.body in friendreq/status: ", req.body);
     const viewer = req.session.user_id;
     const viewee = req.body.id;
     ////have if that will check the params to know which db query to do:
@@ -386,20 +334,14 @@ app.post("/friendreq/:status", (req, res) => {
     if (req.params.status == "Connect!") {
         db.friendRequest(viewer, viewee)
             .then((results) => {
-                //console.log("results in checkFriendship", results.rows);
                 res.json({ button: "Cancel" });
             })
             .catch((err) => {
                 console.log("error in friendreq/:status", err);
             });
     } else if (req.params.status == "Accept") {
-        //console.log("Do I actually know I'm here?!");
-        //console.log("viewee: ", viewee);
-        //console.log("req.params.id: ", req.params.id);
         db.acceptRequest(viewer, viewee)
             .then((results) => {
-                //console.log("did I accept friendship?");
-                //console.log("results in acceptFriendship", results.rows);
                 res.json({ button: "Disconnect", id: viewee });
             })
             .catch((err) => {
@@ -410,18 +352,14 @@ app.post("/friendreq/:status", (req, res) => {
         req.params.status == "Cancel"
     ) {
         db.deleteFriendship(viewer, viewee).then((results) => {
-            //console.log("results in deleteFriendship: ", results.rows);
-            //console.log("DId it delete?");
             res.json({ button: "Connect!" });
         });
     }
 });
 
 app.get("/groupies", (req, res) => {
-    //console.log("friends sanity check");
     db.checkGroupies(req.session.user_id)
         .then((results) => {
-            //console.log("results in checkGroupies: ", results.rows);
             res.json({ data: results.rows });
         })
         .catch((err) => {
@@ -437,17 +375,10 @@ app.get("/post/user/:id", (req, res) => {
     } else {
         viewee = req.params.id;
     }
-    //console.log("viewer: ", viewer);
-    //console.log("viewee: ", viewee);
-    //db.checkFriendship = (viewer, viewee).then((results)=> {
-
-    //})
 
     db.getPosts(viewee).then(({ rows }) => {
-        //console.log("results in getposts: ", rows);
         if (viewee == viewer) {
             res.json({ rows: rows, deleteButton: true });
-            //console.log("viewee==viewer: ", viewee == viewer);
         } else {
             res.json({ rows: rows, deleteButton: false });
         }
@@ -455,8 +386,6 @@ app.get("/post/user/:id", (req, res) => {
 });
 
 app.post("/post/user/:id", (req, res) => {
-    //console.log("req.body: ", req.body);
-    //console.log("req.params.id: ", req.params.id);
     const poster = req.session.user_id;
     let postee;
     if (req.params.id === "undefined") {
@@ -464,18 +393,10 @@ app.post("/post/user/:id", (req, res) => {
     } else {
         postee = req.params.id;
     }
-    //console.log("poster: ", poster);
-    //console.log("postee: ", postee);
     db.addNewPost(poster, postee, req.body.wallInput)
         .then((results) => {
-            //console.log(results.rows[0]);
-            //const lastPostId = results.rows[0].id;
             db.getPosts(postee)
                 .then((results) => {
-                    //console.log(
-                    //    "results.rows in displayPost: ",
-                    //    results.rows[0]
-                    //);
                     if (poster == postee) {
                         res.json({ rows: results.rows[0], deleteButton: true });
                     } else {
@@ -491,7 +412,6 @@ app.post("/post/user/:id", (req, res) => {
         })
         .catch((err) => {
             console.log("error in addNewPost: ", err);
-            //console.log('err.code==="23514": ', err.code === "23514");
             if (err.code === "23514") {
                 res.json({ emptyPost: true });
             }
@@ -499,15 +419,10 @@ app.post("/post/user/:id", (req, res) => {
 });
 
 app.post("/deletepost", (req, res) => {
-    //console.log("req.params: ", req.params);
-    //console.log("req.body.post_id: ", req.body.post_id);
     db.deletePost(req.body.post_id)
         .then(({ rows }) => {
-            console.log("rows in deletePost: ", rows);
-
             db.getPosts(req.session.user_id)
                 .then(({ rows }) => {
-                    //console.log("results in getposts: ", rows);
                     res.json({ rows: rows, deleteButton: true });
                 })
                 .catch((err) => {
@@ -517,7 +432,6 @@ app.post("/deletepost", (req, res) => {
         .catch((err) => {
             console.log("err in deletePost: ", err);
         });
-    //console.log("req: ", req);
 });
 
 app.get("/logout", (req, res) => {
@@ -549,10 +463,8 @@ io.on("connection", (socket) => {
     db.getChatHistory()
         .then(({ rows }) => {
             if (rows.length === 0) {
-                //console.log("no messages!");
                 socket.emit("chatHistory", "no messages!");
             } else {
-                //console.log("results.rows in getChatHistory", rows);
                 socket.emit("chatHistory", rows.reverse());
             }
         })
@@ -560,19 +472,12 @@ io.on("connection", (socket) => {
             console.log("error in getChatHistory: ", err);
         });
     socket.on("chatInput", (data) => {
-        //console.log("data in chatInput: ", data);
-        //console.log("user_id: ", user_id);
         db.storeMessage(user_id, data).then((results) => {
-            //console.log("results in chatInput: ", results);
-            //const lastMsgId = results.rows[0].id;
-            //console.log("lastMsgId: ", lastMsgId);
             db.displayMessage().then(({ rows }) => {
-                //console.log("rows in displayMessages", rows);
                 io.emit("displayMsg", rows[0]);
             });
         });
     });
-    //console.log("user_id sanity check: ", user_id);
     socket.on("disconnect", function () {
         console.log(`socket with the id ${socket.id} is now DISCONNECTED`);
     });
