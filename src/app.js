@@ -1,4 +1,3 @@
-//import React, { Component } from 'react';
 import React, { Fragment } from "react";
 import Header from "./header";
 import axios from "./axios";
@@ -19,7 +18,6 @@ class App extends React.Component {
     }
     componentDidMount() {
         axios.get("/user").then(({ data }) => {
-            //console.log("data.data in get /user: ", data.data);
             this.setState({
                 first: data.data.first,
                 last: data.data.last,
@@ -51,12 +49,6 @@ class App extends React.Component {
                 url: img,
                 uploaderIsVisible: false,
             }
-            //() => {
-            //    console.log(
-            //        "this.state in imageUpdate function",
-            //        this.state.url
-            //    );
-            //}
         );
     }
     bioUpdate(bio) {
