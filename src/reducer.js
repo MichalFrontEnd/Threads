@@ -22,7 +22,6 @@ export default function reducer(state = {}, actions) {
     }
 
     if (actions.type == "DELETE_FRIEND") {
-        //console.log("state.pending: ", state.groupies);
         state = {
             ...state,
             groupies: state.groupies.filter((user) => user.id != actions.id),
@@ -42,7 +41,6 @@ export default function reducer(state = {}, actions) {
             chatInput: actions.chatInput,
         };
     }
-    //console.log("state.chatInput: ", state.chatInput);
 
     if (actions.type == "DISPLAY_MSG") {
         state = {
@@ -50,7 +48,6 @@ export default function reducer(state = {}, actions) {
             history: [...state.history, actions.msg],
         };
     }
-    //console.log("state.history after DISPLAY_MSG: ", state.history);
 
     return state;
 }
