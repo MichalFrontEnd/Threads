@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-//import axios from "./axios";
 import { useDispatch, useSelector } from "react-redux";
 import { getGroupies, acceptFriend, deleteFriend } from "./actions";
 
@@ -19,7 +18,6 @@ export default function Friends() {
     );
 
     useEffect(() => {
-        //axios.get(`/friends/${props.id}`);
         dispatch(getGroupies());
     }, []);
 
