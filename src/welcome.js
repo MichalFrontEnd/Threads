@@ -3,7 +3,6 @@ import Registration from "./reg";
 import Login from "./login";
 import ResetPassword from "./resetpwd";
 import { HashRouter, Route, Link } from "react-router-dom";
-//import ReactDOM from "react-dom";
 
 export default function Welcome() {
     return (
