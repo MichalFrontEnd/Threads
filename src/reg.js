@@ -14,7 +14,6 @@ export default class Registration extends React.Component {
         });
     }
     submit() {
-        //e.preventDefault();
         const newUser = {
             first: this.state.first,
             last: this.state.last,
@@ -24,9 +23,7 @@ export default class Registration extends React.Component {
         axios
             .post("/register", newUser)
             .then(({ data }) => {
-                //console.log("data: ", data);
                 if (data.regSuccess) {
-                    //console.log("We have succeeded");
                     location.replace("/");
                 } else {
                     if (data.emailExists) {
