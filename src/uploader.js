@@ -2,7 +2,6 @@ import React, { Fragment } from "react";
 import axios from "./axios";
 
 class Uploader extends React.Component {
-    //let { url, toggleUpload } = props
     constructor(props) {
         super(props);
         this.state = {
@@ -18,13 +17,10 @@ class Uploader extends React.Component {
     photoUpload(e) {
         e.preventDefault();
         let fd = new FormData();
-        //console.log("this.state.selectedPhoto: ", this.state.selectedPhoto);
         fd.append(
             "file",
             this.state.selectedPhoto
-            //this.state.selectedPhoto.name
         );
-        //console.log("formData: ", fd);
         axios
             .post(
                 "/photoupld",
