@@ -18,11 +18,8 @@ export default function Profile(props) {
     } = props;
     const [isShown, setIsShown] = useState(false);
     const [modalShown, setModalShown] = useState(false);
-    //const [hasFrame, setHasFrame] = useState(false);
-    //const toggleFrame = () => setHasFrame(!hasFrame);
 
     function toggleModal() {
-        //console.log("modal should show");
 
         setModalShown(!modalShown);
     }
@@ -39,13 +36,11 @@ export default function Profile(props) {
             </div>
             <div
                 className="pro_pic_container"
-                //{hasFrame ? "frame_hover" : ""}
                 onMouseEnter={(e) => {
                     setIsShown(true);
                 }}
                 onMouseLeave={(e) => {
                     setIsShown(false);
-                    //toggleFrame;
                 }}
                 onClick={() => toggleModal()}
             >
@@ -53,7 +48,6 @@ export default function Profile(props) {
                     first={first}
                     last={last}
                     url={url}
-                    //toggleUpload={toggleUpload}
                     pPicClass="profile_pic"
                 />
             </div>
