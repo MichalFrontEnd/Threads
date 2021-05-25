@@ -4,7 +4,6 @@ import Profilepic from "./profilepic";
 import { Link } from "react-router-dom";
 
 export default function Header(props) {
-    //console.log("props in header: ", props);
     return (
         <header>
             <Logo />
@@ -25,7 +24,6 @@ export default function Header(props) {
                     first={props.first}
                     last={props.last}
                     url={props.url}
-                    //toggleUpload={props.doNothing}
                     pPicClass="header_pic"
                 />
             </Link>
