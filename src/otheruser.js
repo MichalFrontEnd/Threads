@@ -4,7 +4,6 @@ import Friendbutton from "./friendbutton";
 import Coverphoto from "./coverphoto";
 import Wallposts from "./wallposts";
 
-//import { Link, BrowserRouter } from "react-router-dom";
 
 class OtherUser extends React.Component {
     constructor(props) {
@@ -13,18 +12,11 @@ class OtherUser extends React.Component {
             id: this.props.match.params.id,
             friends: false,
             modalIsVisible: false,
-            //viewer: null,
         };
         this.toggleModal = this.toggleModal.bind(this);
     }
     componentDidMount() {
-        //const id = this.props.match.params.id;
-        //console.log(
-        //    "this.props.match.params in OtherUser mount: ",
-        //    this.props.match.params
-        //);
         axios.get(`/switch/user/${this.state.id}`).then(({ data }) => {
-            console.log("data in GET ouser", data);
             if (data.sameUser) {
                 this.props.history.push("/");
             }
@@ -41,9 +33,6 @@ class OtherUser extends React.Component {
                         bio: data.data.bio,
                         coverphoto: data.data.coverphoto,
                     }
-                    //() => {
-                    //    console.log("setState sanity check", this.state);
-                    //}
                 );
             }
         });
@@ -58,9 +47,6 @@ class OtherUser extends React.Component {
         this.setState(
             {
                 friends: arg,
-            },
-            () => {
-                console.log("this.state.friends: ", this.state.friends);
             }
         );
     }
@@ -110,7 +96,6 @@ class OtherUser extends React.Component {
                     updateFriendship={(e) => {
                         this.updateFriendship(e);
                     }}
-                    // viewer={this.state.viewer}
                 />
                 <div className="user_info">
                     <h1 className="username">
