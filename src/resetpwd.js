@@ -18,8 +18,6 @@ export default class ResetPassword extends React.Component {
         axios
             .post("/checkemail", { email: this.state.email })
             .then(({ data }) => {
-                //console.log("back from checking email");
-                //console.log("data in checkEmail: ", data);
                 if (data.checkEmailSuccess) {
                     this.setState({
                         step: 2,
@@ -38,7 +36,6 @@ export default class ResetPassword extends React.Component {
                 code: this.state.code,
             })
             .then(({ data }) => {
-                console.log("data in checkcode: ", data);
                 if (data.checkCodeSuccess) {
                     this.setState({
                         success: true,
@@ -71,7 +68,6 @@ export default class ResetPassword extends React.Component {
 
     render() {
         const { step } = this.state;
-        //can also do a regular "if" statement, or write a function
         return (
             <div className="reg_form">
                 {step == 1 && (
