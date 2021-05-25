@@ -5,24 +5,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { sendMessage } from "./actions";
 import { Link } from "react-router-dom";
 
-//const elemRef = useRef();
 
 export default function Chat() {
     const dispatch = useDispatch();
     const inputRef = useRef("");
     const chatWindowRef = useRef();
-    //let [chatInput, setChatInput] = useState("");
-
     const history = useSelector((state) => state.history);
 
-    //const msg = useSelector((state) => state.msg);
     const scrollToBottom = () => {
         chatWindowRef.current.scrollTop =
             chatWindowRef.current.scrollHeight -
             chatWindowRef.current.clientHeight;
     };
-    //console.log("msg: ", msg);
-    //console.log("history: ", history);
     useEffect(() => {
         scrollToBottom();
     });
@@ -33,7 +27,6 @@ export default function Chat() {
 
     function newMessage() {
         dispatch(sendMessage(inputRef.current.value));
-        //setUserInput("");
         inputRef.current.value = "";
     }
 
@@ -61,7 +54,6 @@ export default function Chat() {
                                     <Link to={`/user/${history.id}`}>
                                         {history.first} {history.last}
                                     </Link>
-
                                     {`  on ${history.ts}`}
                                 </h4>
                                 <p>{history.message}</p>
