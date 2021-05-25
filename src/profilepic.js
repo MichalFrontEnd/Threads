@@ -12,10 +12,7 @@ export default function Profilepic(props) {
                 alt={(first, last)}
                 onClick={toggleUpload}
                 className={props.pPicClass}
-                //toggleUpload={toggleUpload}
             />
-
-            {/*<button onClick={toggleUpload}>Add photo</button>*/}
         </React.Fragment>
     );
 }
