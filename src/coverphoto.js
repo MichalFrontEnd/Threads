@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
 export default function Coverphoto(props) {
-    //console.log("props in coverPhoto", props);
     let { coverphoto } = props;
     let [randomCover, setRandomCover] = useState("");
     useEffect(() => {
