@@ -27,17 +27,14 @@ class Bio extends React.Component {
         this.setState(
             {
                 mode: "edit",
-            },
-            () => console.log("moving into edit mode!")
+            }
         );
     }
     sendBio() {
         let fd = new FormData();
-        //console.log("this.state.newBio ", this.state.newBio);
         fd.append("bio", this.state.value);
 
         axios.post("/updatebio", { bio: this.state.value }).then(({ data }) => {
-            //console.log("data in updateBio: ", data.data);
             this.props.bioUpdate(data.data);
             this.setState({
                 mode: "view",
@@ -54,14 +51,11 @@ class Bio extends React.Component {
         if (e.keyCode === 13) {
             this.sendBio();
         }
-        //setWallInput("");
     }
 
     render() {
         let elem;
         const { mode } = this.state;
-
-        //if (!this.props.bio) {
         {
             mode == "add" &&
                 (elem = (
@@ -76,7 +70,6 @@ class Bio extends React.Component {
         //}
         {
             mode == "view" &&
-                //if (this.mode === "view") {
                 (elem = (
                     <div className="bio_container">
                         <p className="bio">{this.props.bio}</p>
@@ -89,7 +82,6 @@ class Bio extends React.Component {
                     </div>
                 ));
         }
-        // else if (this.mode === "edit") {
         {
             mode == "edit" &&
                 (elem = (
