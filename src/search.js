@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "./axios";
-//import OtherUser from "./otheruser";
 
 export default function Search(props) {
     const [lastUsers, setLastUsers] = useState([]);
@@ -10,9 +9,7 @@ export default function Search(props) {
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        //console.log("search has mounted!");
         axios.get("/showusers").then(({ data }) => {
-            //console.log("data in search", data.data);
             setLastUsers(data.data);
         });
 
